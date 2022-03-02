@@ -5,6 +5,12 @@ import primitives.Vector;
 
 import java.util.Objects;
 
+/**
+ * class Ray
+ *
+ * @authors Michael @ Roy
+ */
+
 public class Ray {
     private Point p0;
     private Vector dir;

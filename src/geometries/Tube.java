@@ -4,6 +4,12 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+/**
+ * Tube class
+ *
+ * @authors Michael @ Roy
+ */
+
 public class Tube implements Geometry {
     final Ray axisRay;
     final Double radius;

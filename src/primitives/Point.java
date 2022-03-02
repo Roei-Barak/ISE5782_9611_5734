@@ -2,6 +2,12 @@ package primitives;
 
 import java.util.Objects;
 
+/**
+ * Point class represent 3d point
+ *
+ * @authors Michael @ Roy
+ */
+
 public class Point {
     public Point(Double3 xyz) {
         _xyz = xyz;

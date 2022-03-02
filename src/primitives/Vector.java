@@ -2,6 +2,12 @@ package primitives;
 
 public class Vector extends Point{
 
+    /**
+     * class Vector
+     *
+     * @authors Michael @ Roy
+     */
+
     public Vector(Double3 xyz) {
         super(xyz);
         if (_xyz.equals((Double3.ZERO))){

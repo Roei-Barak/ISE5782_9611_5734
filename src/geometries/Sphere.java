@@ -4,6 +4,11 @@ import geometries.Geometry;
 import primitives.Point;
 import primitives.Vector;
 
+/**
+ * Sphere class
+ *
+ * @authors Michael @ Roy
+ */
 public class Sphere implements Geometry {
     private Point center;
     private double radius;
