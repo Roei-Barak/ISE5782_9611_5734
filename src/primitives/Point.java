@@ -7,7 +7,7 @@ public class Point {
         _xyz = xyz;
     }
 
-    final Double3 _xyz;
+    public final Double3 _xyz;
 
     public Point(double x, double y, double z) {
         _xyz = new Double3(x,y,z);
@@ -35,7 +35,7 @@ public class Point {
         return new Point(_xyz.add(vector._xyz));
     }
 
-    public Point subtract(Point point) {
+    public Vector subtract(Point point) {
         Double3 result = _xyz.subtract(point._xyz);
         if (result.equals(Double3.ZERO)){
             throw new IllegalArgumentException("resulting of substructure : Vector (0,0,0,) not allowed");
