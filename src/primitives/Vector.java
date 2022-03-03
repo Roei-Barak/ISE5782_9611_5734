@@ -2,12 +2,6 @@ package primitives;
 
 public class Vector extends Point{
 
-    /**
-     * class Vector
-     *
-     * @authors Michael @ Roy
-     */
-
     public Vector(Double3 xyz) {
         super(xyz);
         if (_xyz.equals((Double3.ZERO))){
@@ -54,7 +48,7 @@ public class Vector extends Point{
         double v2 = vector._xyz._d2;
         double v3 = vector._xyz._d3;
 
-        return (u1*v1+u2*v2+v3*v3);
+        return (u1*v1+u2*v2+u3*v3);
     }
 
     public Vector scale(Vector vector, int number){
