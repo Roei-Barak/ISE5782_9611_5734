@@ -24,7 +24,7 @@ public class Point {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Point point = (Point) o;
-        return Objects.equals(_xyz, point._xyz);
+        return _xyz.equals(point._xyz);
     }
 
     @Override
@@ -47,5 +47,17 @@ public class Point {
             throw new IllegalArgumentException("resulting of substructure : Vector (0,0,0,) not allowed");
         }
         return new Vector(result);
+    }
+
+    public double distanceSquared(Point p){
+        double u1 =Math.abs(_xyz._d1-p._xyz._d1);
+        double u2 =Math.abs(_xyz._d2-p._xyz._d2);
+        double u3 =Math.abs(_xyz._d3-p._xyz._d3);
+
+        return u1 * u1 + u2 * u2 + u3 * u3;
+    }
+
+    public double distance(Point p){
+        return Math.sqrt(this.distanceSquared(p));
     }
 }
