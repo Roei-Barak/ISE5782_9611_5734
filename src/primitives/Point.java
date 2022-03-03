@@ -9,6 +9,11 @@ import java.util.Objects;
  */
 
 public class Point {
+    /**
+     * constuctors
+     * @param xyz
+     */
+
     public Point(Double3 xyz) {
         _xyz = xyz;
     }
@@ -19,6 +24,11 @@ public class Point {
         _xyz = new Double3(x,y,z);
     }
 
+    /**
+     *
+     * @param o
+     * @return isEqual?
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -32,15 +42,29 @@ public class Point {
         return Objects.hash(_xyz);
     }
 
+    /**
+     * toString
+     * @return
+     */
     @Override
     public String toString() {
         return "Point " + _xyz;
     }
 
+    /**
+     *
+     * @param vector
+     * @return new point: point+vector
+     */
     public Point add(Vector vector) {
         return new Point(_xyz.add(vector._xyz));
     }
 
+    /**
+     *
+     * @param point
+     * @return new vector
+     */
     public Vector subtract(Point point) {
         Double3 result = _xyz.subtract(point._xyz);
         if (result.equals(Double3.ZERO)){
@@ -48,6 +72,12 @@ public class Point {
         }
         return new Vector(result);
     }
+
+    /**
+     *
+     * @param p
+     * @return Squared distance between tow points
+     */
 
     public double distanceSquared(Point p){
         double u1 =Math.abs(_xyz._d1-p._xyz._d1);
@@ -57,6 +87,11 @@ public class Point {
         return u1 * u1 + u2 * u2 + u3 * u3;
     }
 
+    /**
+     *
+     * @param p
+     * @return  distance between tow points
+     */
     public double distance(Point p){
         return Math.sqrt(this.distanceSquared(p));
     }
