@@ -67,7 +67,7 @@ class VectorTest {
     }
 
     /**
-     * Test that length of cross-product is proper(orthogonal vectors taken for simplicity)
+     * Test the length of cross-product is good
      */
     @Test
     void crossProduct1() {
@@ -94,11 +94,18 @@ class VectorTest {
     }
 
     @Test
-    void crossProduct() {
+    /**
+     * test ZERO-vector from cross-product of co-lines vectors
+     */
+    void crossProduct3() {
+        // =============== Boundary Values Test ==================
+        assertThrows(IllegalArgumentException.class,() -> { v1.crossProduct(v2);}
+                ,"ERROR: cross-Product of parallel vectors didnt throw an exceptionn");
     }
 
     @Test
     void normalize() {
+
     }
 
     @Test
