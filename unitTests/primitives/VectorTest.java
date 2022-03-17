@@ -8,7 +8,7 @@ import static primitives.Util.isZero;
 
 
 /**
- * Unit tests for Cylinder
+ * Unit tests for Vector
  * @author Michael and Roi
  */
 
@@ -63,7 +63,22 @@ class VectorTest {
 
 
     @Test
-    void scale() {
+    void scaleEP() {
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Simple test
+        assertEquals(new Vector(3, 6, 9),
+                new Vector(1, 2, 3).scale(3),
+                "Wrong scale vector");
+    }
+
+    @Test
+    void scaleBVA() {
+        // =============== Boundary Values Tests ==================
+        // TC11: test scaling to 0
+        assertThrows(IllegalArgumentException.class,
+                () -> new Vector(2, 3, 5).scale(0),
+                "Scale by 0 must throw exception");
+
     }
 
     /**
@@ -109,6 +124,18 @@ class VectorTest {
     }
 
     @Test
-    void add() {
+    void addEP() {
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Simple test
+        assertEquals(new Vector(1, 2, 3),
+                new Vector(2, 3, 4).add(new Vector(-1, -1, -1)),
+                "Wrong add Vector");
+    }
+    @Test
+    void addBV() {
+        Vector v1 = new Vector(1,1,1);
+        Vector v2 = new Vector(-1,-1,-1);
+
+        assertThrows(IllegalArgumentException.class,()-> v1.add(v2), "should have throw Error - vector 0");
     }
 }
