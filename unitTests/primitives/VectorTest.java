@@ -49,7 +49,7 @@ class VectorTest {
     public void dotProductEP() {
 
         // ============ Equivalence Partitions Tests ==============
-        // TCXX: Simple dotProduct test
+        // TC01: Simple dotProduct test
         assertEquals(-28d,v1.dotProduct(v2),0.000001,"dotProduct Error");
         assertTrue(isZero(v1.dotProduct(v2) + 28));
     }
@@ -57,7 +57,7 @@ class VectorTest {
     @Test
     public void dotProductBVA() {
         // =============== Boundary Values Tests ==================
-        // TCXX: dotProduct for orthogonal vectors
+        // TC11: dotProduct for orthogonal vectors
         assertEquals(0d, v1.dotProduct(v3),0.000001,"dotProduct for orthogonal Vectors != zero");
     }
 
@@ -120,7 +120,15 @@ class VectorTest {
 
     @Test
     void normalize() {
-
+        Vector v1 = new Vector(3, 0, 4);
+        Vector v2 = v1.normalize();
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Simple test
+        assertFalse(v1 == v2, "changed the first vector");
+        assertEquals(1d, v2.lengthSquared(), 0.000001, "wrong normalized vector length - bigger than 1");
+        assertThrows(IllegalArgumentException.class,() -> v1.crossProduct(v2),
+                "normaliz vector in the wrong direction");
+        assertEquals(new Vector(0.6, 0, 0.8), v2, "wrong normalized vector");
     }
 
     @Test
@@ -133,6 +141,9 @@ class VectorTest {
     }
     @Test
     void addBV() {
+        // =============== Boundary Values Tests ==================
+        // TC11: tests creation of 0 Vector by add
+
         Vector v1 = new Vector(1,1,1);
         Vector v2 = new Vector(-1,-1,-1);
 
