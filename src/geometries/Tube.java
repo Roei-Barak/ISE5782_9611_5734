@@ -14,11 +14,17 @@ public class Tube implements Geometry {
     final Ray axisRay;
     final Double radius;
 
+    //full constructor
     public Tube(Ray axisRay, Double radius) {
         this.axisRay = axisRay;
         this.radius = radius;
     }
 
+    /**
+     *
+     * @param p
+     * @return
+     */
     @Override
     public Vector getNormal(Point p) {
 
@@ -42,11 +48,12 @@ public class Tube implements Geometry {
             throw new IllegalArgumentException("point cannot be on the tube axis");
         }
 
-        Vector n = p.subtract(p1).normalize();
+        Vector v1 = p.subtract(p1).normalize();
 
-        return n;
+        return v1;
     }
 
+    // getters
     public Ray getAxisRay() {
         return axisRay;
     }

@@ -20,11 +20,32 @@ public class Cylinder extends Tube {
         super(axisRay, radius);
         this.height = height;
     }
+
+    /**
+     * https://stackoverflow.com/questions/36266357/normal-on-of-a-cylinder
+     * @param point
+     * @return normal vector to Cylinder
+     */
+
     @Override
     public Vector getNormal(Point point) {
-        return null;
-    }
+        //if the vector is contained in one of the cylinder bases than the vector from one point in the base to it
 
+        //would be orthogonal to the axis ray vector
+
+        Point base0 = axisRay.getP0();
+        Point base1 = base0.add(axisRay.getDir().scale((int) height));
+
+        if (point.equals(base0) || point.equals(base1))
+            return axisRay.getDir();
+
+        Vector v1 = point.subtract(base0);
+        Vector v2 = point.subtract(base1);
+        if (v1.dotProduct(axisRay.getDir()) == 0 || v2.dotProduct(axisRay.getDir()) == 0) {
+            return axisRay.getDir();
+        } else
+            return super.getNormal(point);
+    }
 
     /**
      * getHeight function
