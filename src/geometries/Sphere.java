@@ -1,6 +1,5 @@
 package geometries;
 
-import geometries.Geometry;
 import primitives.Point;
 import primitives.Vector;
 
@@ -9,14 +8,21 @@ import primitives.Vector;
  *
  * @authors Michael @ Roy
  */
+
 public class Sphere implements Geometry {
     private Point center;
     private double radius;
 
+    /**
+     * full constructor
+     * @param center
+     * @param radius
+     */
     public Sphere(Point center, double radius) {
         this.center = center;
         this.radius = radius;
     }
+    //getters
 
     public Point getCenter() {
         return center;
@@ -26,17 +32,26 @@ public class Sphere implements Geometry {
         return radius;
     }
 
+    /**
+     *
+     * @return Sphere String
+     */
     @Override
     public String toString() {
         return "Sphere{" +
-                "center=" + center._xyz +
+                "center=" + center.xyz +
                 ", radius=" + radius +
                 '}';
     }
 
+    /**
+     *
+     * @param p1
+     * @return new normalize vector to the sphere
+     */
     public Vector getNormal(Point p1){
 
-        Vector v=new Vector(p1.subtract(center)._xyz);
+        Vector v=new Vector(p1.subtract(center).xyz);
         return v.normalize();
     }
 

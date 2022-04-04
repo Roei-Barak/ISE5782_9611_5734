@@ -15,13 +15,13 @@ public class Point {
      */
 
     public Point(Double3 xyz) {
-        _xyz = xyz;
+        this.xyz = xyz;
     }
 
-    public final Double3 _xyz;
+    public final Double3 xyz;
 
     public Point(double x, double y, double z) {
-        _xyz = new Double3(x,y,z);
+        xyz = new Double3(x,y,z);
     }
 
     /**
@@ -34,12 +34,12 @@ public class Point {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Point point = (Point) o;
-        return _xyz.equals(point._xyz);
+        return xyz.equals(point.xyz);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(_xyz);
+        return Objects.hash(xyz);
     }
 
     /**
@@ -48,7 +48,7 @@ public class Point {
      */
     @Override
     public String toString() {
-        return "Point " + _xyz;
+        return "Point " + xyz;
     }
 
     /**
@@ -57,7 +57,7 @@ public class Point {
      * @return new point: point+vector
      */
     public Point add(Vector vector) {
-        return new Point(_xyz.add(vector._xyz));
+        return new Point(xyz.add(vector.xyz));
     }
 
     /**
@@ -66,7 +66,7 @@ public class Point {
      * @return new vector
      */
     public Vector subtract(Point point) {
-        Double3 result = _xyz.subtract(point._xyz);
+        Double3 result = xyz.subtract(point.xyz);
         if (result.equals(Double3.ZERO)){
             throw new IllegalArgumentException("resulting of substructure : Vector (0,0,0,) not allowed");
         }
@@ -80,9 +80,9 @@ public class Point {
      */
 
     public double distanceSquared(Point p){
-        double u1 =Math.abs(_xyz._d1-p._xyz._d1);
-        double u2 =Math.abs(_xyz._d2-p._xyz._d2);
-        double u3 =Math.abs(_xyz._d3-p._xyz._d3);
+        double u1 =Math.abs(xyz.d1 -p.xyz.d1);
+        double u2 =Math.abs(xyz.d2 -p.xyz.d2);
+        double u3 =Math.abs(xyz.d3 -p.xyz.d3);
 
         return u1 * u1 + u2 * u2 + u3 * u3;
     }
