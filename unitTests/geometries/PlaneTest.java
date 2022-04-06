@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlaneTest {
 
     @Test
-    void getNormal() {
+    void testGetNormal() {
         Point p1=new Point(1,1,1);
         Point p2=new Point(1,1,0);
         Point p3=new Point(1,0,1);
