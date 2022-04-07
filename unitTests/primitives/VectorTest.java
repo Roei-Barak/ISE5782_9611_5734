@@ -12,7 +12,11 @@ import static primitives.Util.isZero;
  * @author Michael and Roi
  */
 
+/**
+ * unitests for {@link primitives.Vector}
+ */
 
+//constructor test
 class VectorTest {
 
 

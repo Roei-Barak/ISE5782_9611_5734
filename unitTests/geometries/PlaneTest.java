@@ -14,9 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class PlaneTest {
+    /**
+     * test for {@link Plane#getNormal()}
+     */
 
     @Test
     void testGetNormal() {
+             // ============ Equivalence Partitions Tests ==============
         Point p1=new Point(1,1,1);
         Point p2=new Point(1,1,0);
         Point p3=new Point(1,0,1);

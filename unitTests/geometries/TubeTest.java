@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TubeTest {
 
     @Test
-    void testvoidGetNormal() {
+    void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: There is a simple single test here
         Tube tube = new Tube( new Ray(new Point(0, 0, 1), new Vector(0, -1, 0)),1.0);
