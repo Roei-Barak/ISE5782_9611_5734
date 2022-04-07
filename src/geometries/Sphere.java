@@ -48,6 +48,7 @@ public class Sphere implements Geometry {
      *
      * @param p1
      * @return new normalize vector to the sphere
+     * source: Dan presentation: "Introduction to Software Engineering" page 33
      */
     public Vector getNormal(Point p1){
 

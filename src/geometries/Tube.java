@@ -23,7 +23,9 @@ public class Tube implements Geometry {
     /**
      *
      * @param p
-     * @return
+     * @return normal to tube
+     * source: Dans presentation: "Introduction to Software Engineering" page: 35
+     *
      */
     @Override
     public Vector getNormal(Point p) {
