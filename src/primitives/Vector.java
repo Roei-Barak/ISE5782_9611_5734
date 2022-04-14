@@ -72,7 +72,7 @@ public class Vector extends Point {
      * @return new scaled vector
      */
 
-    public Vector scale(int number) {
+    public Vector scale(double number) {
         if (number == 0) {
             throw new IllegalArgumentException("Zero vector not allowed");
         }

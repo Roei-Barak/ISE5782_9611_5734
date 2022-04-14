@@ -24,6 +24,20 @@ public class Point {
         xyz = new Double3(x,y,z);
     }
 
+    public Double3 getXyz() {
+        return xyz;
+    }
+
+    public double getX(){
+        return this.xyz.d1;
+    }
+    public double getY(){
+        return this.xyz.d2;
+    }
+    public double getZ(){
+        return this.xyz.d3;
+    }
+
     /**
      *
      * @param o
@@ -73,6 +87,7 @@ public class Point {
         return new Vector(result);
     }
 
+
     /**
      *
      * @param p
@@ -95,4 +110,6 @@ public class Point {
     public double distance(Point p){
         return Math.sqrt(this.distanceSquared(p));
     }
+
+
 }
