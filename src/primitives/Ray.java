@@ -31,6 +31,13 @@ public class Ray {
         return p0;
     }
 
+    public Point getPoint(double t) {
+        return new Point(p0.getX()+(dir.scale(t).getX()),
+                p0.getY()+(dir.scale(t).getY()),
+                p0.getZ()+(dir.scale(t).getZ()));
+    }
+
+
     public Vector getDir() {
         return dir;
     }
