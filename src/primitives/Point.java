@@ -71,7 +71,7 @@ public class Point {
      * @return new point: point+vector
      */
     public Point add(Vector vector) {
-        return new Point(xyz.add(vector.xyz));
+        return new Point(this.xyz.add(vector.getXyz()));
     }
 
     /**
