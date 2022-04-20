@@ -4,6 +4,9 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.Objects;
+
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
@@ -27,12 +30,15 @@ public class Camera {
         // throw error if not orthogonal
 
         if(!isZero(vto.dotProduct(vup))){
-            throw new IllegalArgumentException("vup and vt0 are not orthogonal");
+            throw new IllegalArgumentException("vup and vto are not orthogonal");
         }
+
         this.p0 = p0;
+
+//        normalize the vectors
         this.vTo = vto.normalize();
         this.vUp = vup.normalize();
-        this.vRight = vTo.crossProduct(vUp);
+        this.vRight = vTo.crossProduct(vUp).normalize();
     }
 
 
@@ -56,29 +62,45 @@ public class Camera {
      * @param i
      * @return Ray
      */
-    public Ray constructRay(int nX, int nY, int j, int i) {
 
-        //ratio:
+    public Ray constructRay(int nX, int nY, int j, int i) { // name was: constructRayThroughPixel
 
-        double Ry  = (double) height / nY;
-        double Rx  = (double) width / nX;
+//        ratio:
+        double rX = alignZero(width / nX);
+        double rY = alignZero(height / nY);
+//       center
 
-        Point Pc = p0.add(vTo.scale(distance)); // image center
+        Point pc = p0.add(vTo.scale(distance));
 
-        Point Pij = Pc;
+        double yI = alignZero((((nY - 1) / 2d) - i) * rY);
+        double xJ = alignZero((j - ((nX - 1) / 2d)) * rX);
 
-        //pixel center:
+        Point pIJ = pc;
+        if (xJ != 0)
+            pIJ = pIJ.add(vRight.scale(xJ));
+        if (yI != 0)
+            pIJ = pIJ.add(vUp.scale(yI));
 
-        double Xj = (j - ((nX - 1) / 2d)) * Rx;
-        double Yi = -(i - ((nY - 1) / 2d)) * Ry;
-
-
-      if (!isZero(Xj)) Pij = Pij.add(vRight.scale(Xj));
-      if (!isZero(Yi)) Pij = Pij.add(vUp.scale(Yi));
-
-      return (new Ray (p0, Pij.subtract(p0)));
-
+        return new Ray(p0, pIJ.subtract(p0));
     }
 
-
+    /**
+     * An override to check if two cameras positioned in the same location with the
+     * same directions in vectors.
+     *
+     * @param obj - An object to compare to this camera.
+     * @return True if: same camera or same fields. else, false.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+        if (!(obj instanceof Camera)) {
+            return false;
+        }
+        Camera camera = (Camera) obj;
+        return p0.equals(camera.p0) && vTo.equals(camera.vTo) && vUp.equals(camera.vUp)
+                && vRight.equals(camera.vRight) && width == camera.width && height == camera.height
+                && distance == camera.distance;
+    }
 }
