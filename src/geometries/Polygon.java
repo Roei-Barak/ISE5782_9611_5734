@@ -8,7 +8,7 @@ import static primitives.Util.*;
 /**
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
  * system
- * 
+ *
  * @author Dan
  */
 public class Polygon implements Geometry {
@@ -19,13 +19,13 @@ public class Polygon implements Geometry {
 	/**
 	 * Associated plane in which the polygon lays
 	 */
-	protected Plane _plane;
-	private int _size;
+	protected Plane plane;
+	private int size;
 
 	/**
 	 * Polygon constructor based on vertices list. The list must be ordered by edge
 	 * path. The polygon must be convex.
-	 * 
+	 *
 	 * @param vertices list of vertices according to their order by edge path
 	 * @throws IllegalArgumentException in any case of illegal combination of
 	 *                                  vertices:
@@ -50,11 +50,11 @@ public class Polygon implements Geometry {
 		// Generate the plane according to the first three vertices and associate the
 		// polygon with this plane.
 		// The plane holds the invariant normal (orthogonal unit) vector to the polygon
-		_plane = new Plane(vertices[0], vertices[1], vertices[2]);
+		plane = new Plane(vertices[0], vertices[1], vertices[2]);
 		if (vertices.length == 3)
 			return; // no need for more tests for a Triangle
 
-		Vector n = _plane.getNormal();
+		Vector n = plane.getNormal();
 
 		// Subtracting any subsequent points will throw an IllegalArgumentException
 		// because of Zero Vector if they are in the same point
@@ -81,11 +81,17 @@ public class Polygon implements Geometry {
 			if (positive != (edge1.crossProduct(edge2).dotProduct(n) > 0))
 				throw new IllegalArgumentException("All vertices must be ordered and the polygon must be convex");
 		}
-		_size = vertices.length;
+		size = vertices.length;
 	}
 
 	@Override
 	public Vector getNormal(Point point) {
-		return _plane.getNormal();
+		return plane.getNormal();
+	}
+
+	@Override
+	public List<Point> findIntersections(Ray ray) {
+		return null;
 	}
 }
+

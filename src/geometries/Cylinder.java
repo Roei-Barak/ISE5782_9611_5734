@@ -23,6 +23,7 @@ public class Cylinder extends Tube {
 
     /**
      * https://stackoverflow.com/questions/36266357/normal-on-of-a-cylinder
+     * source: Dans presentation: "Introduction to Software Engineering" page: 37
      * @param point
      * @return normal vector to Cylinder
      */
