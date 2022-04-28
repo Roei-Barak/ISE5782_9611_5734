@@ -1,7 +1,13 @@
 package geometries;
 
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
+
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * Plane class
@@ -59,4 +65,29 @@ public class Plane implements Geometry{
     public Vector getNormal() {
         return normal;
     }
+
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        Point P0=ray.getP0();
+        Vector v=ray.getDir();
+        Vector n=normal;
+        //denominator
+        double nv = n.dotProduct(v);
+
+        if (isZero(nv)) {
+            return null;
+        }
+        Vector P0_Q=q0.subtract(P0);
+        double t=alignZero(n.dotProduct(P0_Q)/nv);
+        //if t < 0 the array point to the opposite direction
+        // if t==0 the ray origin lay with ×”×§×¨×Ÿ ×œ× ×‘×›×™×•×•×Ÿ ×©×× ×—× ×• ×¨×•×¦×™×
+        if(t > 0)
+        {
+            Point P=P0.add(v.scale(t));
+            return List.of(P);
+        }
+
+        return null;
+        }
+
 }

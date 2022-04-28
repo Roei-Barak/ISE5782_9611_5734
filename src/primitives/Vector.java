@@ -13,6 +13,7 @@ public class Vector extends Point {
         }
     }
 
+
     public Vector(double x, double y, double z) {
         super(x, y, z);
         if (xyz.equals(Double3.ZERO)) {
@@ -72,7 +73,7 @@ public class Vector extends Point {
      * @return new scaled vector
      */
 
-    public Vector scale(int number) {
+    public Vector scale(double number) {
         if (number == 0) {
             throw new IllegalArgumentException("Zero vector not allowed");
         }
@@ -113,6 +114,16 @@ public class Vector extends Point {
     public Vector add(Vector vector) {
         return new Vector(xyz.add(vector.xyz));
     }
+
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (this == obj) return true;
+//        if (obj == null) return false;
+//        if (!(obj instanceof Vector)) return false;
+//        Vector otherVector = (Vector) obj;
+//        return this.equals(new Vector(otherVector.xyz.d1, otherVector.xyz.d2, otherVector.xyz.d3));
+//    }
+
 
 }
 

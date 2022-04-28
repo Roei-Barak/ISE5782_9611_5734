@@ -31,6 +31,13 @@ public class Ray {
         return p0;
     }
 
+    public Point getPoint(double t) {
+        return new Point(p0.getX()+(dir.scale(t).getX()),
+                p0.getY()+(dir.scale(t).getY()),
+                p0.getZ()+(dir.scale(t).getZ()));
+    }
+
+
     public Vector getDir() {
         return dir;
     }
@@ -40,4 +47,16 @@ public class Ray {
         return "Ray{" + p0 + " " + dir + '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ray ray = (Ray) o;
+        return p0.equals(ray.p0) && dir.equals(ray.dir);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(p0, dir);
+    }
 }
