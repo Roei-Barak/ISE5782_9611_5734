@@ -35,7 +35,7 @@ public class Camera {
 
         this.p0 = p0;
 
-//        normalize the vectors
+//        normalyze the vectors
         this.vTo = vto.normalize();
         this.vUp = vup.normalize();
         this.vRight = vTo.crossProduct(vUp).normalize();
