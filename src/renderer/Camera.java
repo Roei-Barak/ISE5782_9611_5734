@@ -30,7 +30,7 @@ public class Camera {
         // throw error if not orthogonal
 
         if(!isZero(vto.dotProduct(vup))){
-            throw new IllegalArgumentException("vup and vto are not orthogonal");
+            throw new IllegalArgumentException("vUp and vTo are not orthogonal");
         }
 
         this.p0 = p0;
@@ -65,10 +65,10 @@ public class Camera {
 
     public Ray constructRay(int nX, int nY, int j, int i) { // name was: constructRayThroughPixel
 
-//        ratio:
-        double rX = alignZero(width / nX);
-        double rY = alignZero(height / nY);
-//       center
+        //    ratio:Pixel width & height
+        double rX = (double)(width / nX);
+        double rY = (double)(height / nY);
+        //    Image center
 
         Point pc = p0.add(vTo.scale(distance));
 
@@ -102,5 +102,33 @@ public class Camera {
         return p0.equals(camera.p0) && vTo.equals(camera.vTo) && vUp.equals(camera.vUp)
                 && vRight.equals(camera.vRight) && width == camera.width && height == camera.height
                 && distance == camera.distance;
+    }
+
+    public Vector getvRight() {
+        return vRight;
+    }
+
+    public Vector getvTo() {
+        return vTo;
+    }
+
+    public Vector getvUp() {
+        return vUp;
+    }
+
+    public Point getP0() {
+        return p0;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }
