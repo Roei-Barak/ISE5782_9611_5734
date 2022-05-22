@@ -1,5 +1,4 @@
 package renderer;
-import renderer.Camera;
 import geometries.Intersectable;
 import geometries.Plane;
 import geometries.Sphere;
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author  Michael and Roi
  */
-public class integrationTest {
+public class CameraIntegrationTest {
 
 	/**
 	 * Test  function intersections counter and compare with expected value
