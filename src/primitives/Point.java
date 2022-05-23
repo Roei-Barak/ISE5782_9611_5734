@@ -9,6 +9,8 @@ import java.util.Objects;
  */
 
 public class Point {
+    public static final Point ZERO = new Point(0,0,0) ;
+
     /**
      * constuctors
      * @param xyz

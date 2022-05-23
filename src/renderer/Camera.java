@@ -1,9 +1,11 @@
 package renderer;
 
+import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.MissingResourceException;
 import java.util.Objects;
 
 import static primitives.Util.alignZero;
@@ -23,6 +25,8 @@ public class Camera {
     private double distance;
     private int width;
     private int height;
+    private ImageWriter imageWriter;
+    private RayTracer rayTracer;
 
 
     // counstructor
@@ -130,5 +134,57 @@ public class Camera {
 
     public int getHeight() {
         return height;
+    }
+
+    public Camera setImageWriter(ImageWriter imageWriter) {
+        this.imageWriter = imageWriter;
+        return this;
+    }
+
+    public Camera setRayTracer(RayTracer rayTracer) {
+        this.rayTracer = rayTracer;
+        return this;
+    }
+
+    public void renderImage() {
+        try {
+            if (imageWriter == null) {
+                throw new MissingResourceException("missing resource", ImageWriter.class.getName(), "");
+            }
+            if (rayTracer == null) {
+                throw new MissingResourceException("missing resource", RayTracer.class.getName(), "");
+            }
+
+            //rendering the image
+            int nX = imageWriter.getNx();
+            int nY = imageWriter.getNy();
+            for (int i = 0; i < nY; i++) {
+                for (int j = 0; j < nX; j++) {
+                    imageWriter.writePixel(j, i, castRay(nX, nY, j, i));
+                }
+            }
+        } catch (MissingResourceException e) {
+            throw new UnsupportedOperationException("Not implemented yet" + e.getClassName());
+        }
+    }
+
+    private Color castRay(int nX, int nY, int j, int i) {
+        Ray ray = constructRay(nX, nY, j, i);
+        primitives.Color pixelColor = rayTracer.traceRay(ray);
+        return pixelColor;
+    }
+
+    public void writeToImage() {
+        imageWriter.writeToImage();
+    }
+
+    public void printGrid(int interval, Color color) {
+        for (int i = 0; i < imageWriter.getNx(); i++) {
+            for (int j = 0; j < imageWriter.getNy(); j++) {
+                if (i % 50 == 0 || j % 50 == 0) {
+                    imageWriter.writePixel(i, j, color);
+                }
+            }
+        }
     }
 }
