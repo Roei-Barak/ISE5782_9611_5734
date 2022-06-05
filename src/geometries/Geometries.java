@@ -16,7 +16,7 @@ public class Geometries implements Intersectable, Iterable<Geometry> {
 
         /********* Constructors ***********/
 
-        // defult
+        // default
         public Geometries()
         {
             geometriesList = new ArrayList<>();
