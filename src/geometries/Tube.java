@@ -1,5 +1,4 @@
 package geometries;
-
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
@@ -7,73 +6,39 @@ import primitives.Vector;
 import java.util.List;
 
 /**
- * Tube class
  *
- * @authors Michael @ Roy
+ * @author Michael and Roi
  */
 
-public class Tube implements Geometry {
+public class Tube implements Geometry{
+    final double radius;
     final Ray axisRay;
-    final Double radius;
 
-    //full constructor
-    public Tube(Ray axisRay, Double radius) {
-        this.axisRay = axisRay;
-        this.radius = radius;
+    public Tube(double rd, Ray r){
+        radius=rd;
+        axisRay = new Ray(r.getP0(),r.getDir());
     }
 
-    /**
-     *
-     * @param p
-     * @return normal to tube
-     * source: Dans presentation: "Introduction to Software Engineering" page: 35
-     *
-     */
     @Override
-    public Vector getNormal(Point p) {
+    public Vector getNormal(Point point) {
+        Point p = axisRay.getP0();
+        Vector v=axisRay.getDir();
 
-        Point P0 = axisRay.getP0();
-        Vector v = axisRay.getDir();
-
-        Vector v0 = p.subtract(P0);
-
-        double t = (v.dotProduct(v0));
-
-        // if t is close to zero
-
-        if (t<0.0000) {
-            return v0.normalize();
-        }
-
-        // cast t to integer to stand in project requierments
-        Point p1 = P0.add(v.scale(((int) t)));
-
-        if (p.equals(p1)) {
+        Vector tmp = point.subtract(p);
+        double num = v.dotProduct(tmp);
+        Point p2 = p.add(v.scale(num));
+        if (p.equals(p2)) {
             throw new IllegalArgumentException("point cannot be on the tube axis");
         }
+        Vector norm = point.subtract(p2).normalize();
+        return norm;
 
-        Vector v1 = p.subtract(p1).normalize();
-
-        return v1;
     }
-
-    // getters
-    public Ray getAxisRay() {
-        return axisRay;
-    }
-
-    public Double getRadius() {
-        return radius;
-    }
-
-    @Override
-    public String toString() {
-        return "Tube{" +
-                "axisRay=" + axisRay +
-                ", radius=" + radius +
-                '}';
-    }
-
+    /***
+     * implementation of findIntersections from Geometry
+     * @param ray - ray pointing towards the graphic object
+     * @return Intersections between the ray and the geometry.
+     */
     @Override
     public List<Point> findIntersections(Ray ray) {
         return null;

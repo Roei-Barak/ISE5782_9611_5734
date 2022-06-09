@@ -3,116 +3,120 @@ package primitives;
 import java.util.Objects;
 
 /**
- * Point class represent 3d point
  *
- * @authors Michael @ Roy
+ * @author Michael and Roi
  */
 
-public class Point {
-    public static final Point ZERO = new Point(0,0,0) ;
+public class Point{
+
+    public static final Point ZERO = new Point(0,0,0);  //origin of the axis
+    final Double3 _xyz;
+
+    /***
+     * implement get point
+     * @return point
+     */
+    public Double3 get_xyz() {
+        return _xyz;
+    }
+    /***
+     * implement getX
+     * @return X
+     */
+    public double get_x() {
+        return _xyz.get_x();
+    }
+    /***
+     * implement getY
+     * @return Y
+     */
+    public double get_y() {
+        return _xyz.get_y();
+    }
+    /***
+     * implement getZ
+     * @return Z
+     */
+    public double get_z() {
+        return _xyz.get_z();
+    }
 
     /**
-     * constuctors
-     * @param xyz
+     * primary constructor for Point
+     * @param xyz Double3 value for x,z,z axis
      */
-
     public Point(Double3 xyz) {
-        this.xyz = xyz;
-    }
-
-    public final Double3 xyz;
-
-    public Point(double x, double y, double z) {
-        xyz = new Double3(x,y,z);
-    }
-
-    public Double3 getXyz() {
-        return xyz;
-    }
-
-    public double getX(){
-        return this.xyz.d1;
-    }
-    public double getY(){
-        return this.xyz.d2;
-    }
-    public double getZ(){
-        return this.xyz.d3;
+        _xyz = xyz;
     }
 
     /**
+     * secondary constructor for Point
      *
-     * @param o
-     * @return isEqual?
+     * @param x coordinate value for X axis
+     * @param y coordinate value for Y axis
+     * @param z coordinate value for Z axis
      */
+    public Point(double x, double y , double z) {
+        //this(new Double3(x,y,z));
+        _xyz = new Double3(x,y,z);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Point point = (Point) o;
-        return xyz.equals(point.xyz);
+        return _xyz.equals(point._xyz);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(xyz);
+        return Objects.hash(_xyz);
+    }
+
+    @Override
+    public String toString() {
+        return "Point " + _xyz ;
     }
 
     /**
-     * toString
-     * @return
+     *
+     * @param other
+     * @return  d = ((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1) + (z2 - z1)*(z2 - z1))
      */
-    @Override
-    public String toString() {
-        return "Point " + xyz;
+    public double distanceSquared(Point other){
+        double x1 = _xyz.d1;
+        double y1 = _xyz.d2;
+        double z1 = _xyz.d3;
+
+        double x2 = other._xyz.d1;
+        double y2 = other._xyz.d2;
+        double z2 = other._xyz.d3;
+
+        return ((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1) + (z2 - z1)*(z2 - z1));
+    }
+
+    /**
+     *
+     * @param other
+     * @return d = Sqrt (lengthSquare)
+     * @link https://www.engineeringtoolbox.com/distance-relationship-between-two-points-d_1854.html
+     */
+    public  double distance (Point other){
+        return Math.sqrt(distanceSquared(other));
     }
 
     /**
      *
      * @param vector
-     * @return new point: point+vector
+     * @return
      */
     public Point add(Vector vector) {
-        return new Point(this.xyz.add(vector.getXyz()));
+        return  new Point(_xyz.add(vector._xyz));
     }
 
-    /**
-     *
-     * @param point
-     * @return new vector
-     */
+
     public Vector subtract(Point point) {
-        Double3 result = xyz.subtract(point.xyz);
-        if (result.equals(Double3.ZERO)){
-            throw new IllegalArgumentException("resulting of substructure : Vector (0,0,0,) not allowed");
-        }
-        return new Vector(result);
+        return new Vector(_xyz.subtract(point._xyz));
     }
-
-
-    /**
-     *
-     * @param p
-     * @return Squared distance between tow points
-     */
-
-    public double distanceSquared(Point p){
-        double u1 =Math.abs(xyz.d1 -p.xyz.d1);
-        double u2 =Math.abs(xyz.d2 -p.xyz.d2);
-        double u3 =Math.abs(xyz.d3 -p.xyz.d3);
-
-        return u1 * u1 + u2 * u2 + u3 * u3;
-    }
-
-    /**
-     *
-     * @param p
-     * @return  distance between tow points
-     */
-    public double distance(Point p){
-        return Math.sqrt(this.distanceSquared(p));
-    }
-
-
-
 }

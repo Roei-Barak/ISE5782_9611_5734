@@ -45,7 +45,7 @@ class SphereTest {
         Point p2 = new Point(1.53484692283495, 0.844948974278318, 0);
         List<Point> result1 = sphere.findIntersections(new Ray(new Point(-1, 0, 0), new Vector(3, 1, 0)));
         assertEquals( 2, result1.size(),"Wrong number of points");
-        if (result1.get(0).getX()> result1.get(1).getY())
+        if (result1.get(0).get_x()> result1.get(1).get_y())
             result1 = Arrays.asList(result1.get(1), result1.get(0));
         assertEquals( Arrays.asList(p1, p2),Arrays.asList(result1.get(0), result1.get(1)),"Ray crosses sphere");
 
@@ -78,7 +78,7 @@ class SphereTest {
         Point p6 = new Point(2, 0, 0);
         List<Point> result6 = sphere.findIntersections(new Ray(new Point(-2, 0, 0), new Vector(3, 0, 0)));
         assertEquals( 2, result6.size(),"Wrong number of points");
-        if (result6.get(0).getX() > result6.get(1).getZ())
+        if (result6.get(0).get_x() > result6.get(1).get_z())
             result6 = Arrays.asList(result6.get(1), result6.get(0));
         assertEquals( Arrays.asList(p5, p6), Arrays.asList(result6.get(0), result6.get(1)),"Ray starts before sphere");
 

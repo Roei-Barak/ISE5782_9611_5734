@@ -10,84 +10,105 @@ import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
- * Plane class
  *
- * @authors Michael @ Roy
+ * @author Michael and Roi
  */
-
 public class Plane implements Geometry{
-
-    private Point q0;
-    private Vector normal;
-
-    /**
-     * full constructor
-     * @param q0 Point,
-     * @param normal
-     */
-    public Plane(Point q0, Vector normal) {
-        this.q0 = q0;
-        this.normal = normal.normalize();
-    }
+    final Point q0;
+    final Vector normal;
 
     /**
-     * constructor from 3 points
-     * @param x
-     * @param y
-     * @param z
-     */
-
-    public Plane(Point x,Point y, Point z)
-    {
-        //doing subtract to check if there's two point that coalesce
-        //then throwing exception from the constructor of Vector
-        Vector check1=x.subtract(y);
-        Vector check2=x.subtract(z);
-        Vector check3=z.subtract(y);
-        Vector a = new Vector(y.subtract(x).xyz);
-        Vector b = new Vector(z.subtract(x).xyz);
-        normal = new Vector(a.crossProduct(b).normalize().xyz);
-        q0 = new Point(x.xyz);
+     * TODO explanations here
+     * @param _q0
+     * @param _normal vector for the normal (will bwe normalized automatically)
+     */public Plane(Point _q0, Vector _normal) {
+        q0 = _q0;
+        normal = _normal.normalize();
     }
 
-    //the point does not matter
-    @Override
-    public Vector getNormal(Point point) {
+    public Plane(Point p1, Point p2, Point p3) {
+        q0 =p1;
+//        //TODO check direction of vectors
+//        Vector U = p1.subtract(p2);
+//        Vector V = p3.subtract(p2);
 
-        return normal;
+        Vector U = p2.subtract(p1);
+        Vector V = p3.subtract(p1);
+
+        Vector N = U.crossProduct(V);
+
+        //right hand rule
+        normal = N.normalize();;
     }
-    //getter for q0 - plane point
+
     public Point getQ0() {
         return q0;
     }
 
-    //second function 'getNormal' without point
+    /***
+     * implementation of getNormal from Geometry
+     * @return the normal vector of the plane
+     */
+
     public Vector getNormal() {
         return normal;
     }
 
+    /***
+     * implementation of getNormal
+     * @param point point outside the grophic shape
+     * @return normal of the plane in the point
+     */
+    @Override
+    public Vector getNormal(Point point) {
+        return getNormal();
+    }
+
+    /***
+     * implementation of findIntersections from Geometry
+     * @param ray - ray pointing towards the graphic object
+     * @return Intersections between the ray and the geometry.
+     */
     @Override
     public List<Point> findIntersections(Ray ray) {
-        Point P0=ray.getP0();
-        Vector v=ray.getDir();
-        Vector n=normal;
-        //denominator
-        double nv = n.dotProduct(v);
 
-        if (isZero(nv)) {
+        Vector n = normal;
+        Vector v = ray.getDir();
+        Point p0 = ray.getP0();
+
+        //check if the point of the ray is same to the point of the plane
+        if(q0.equals(p0)){
+            return  null;
+        }
+
+        Vector P0_Q0 = q0.subtract(p0);
+
+        //numerator of to summarise of parameter t
+        double nP0Q0  = alignZero(n.dotProduct(P0_Q0));
+
+        //check if p0 is on the plane
+        //if the dot-product among P0_Q0 and n is 0, so p0 is on the plane and there is no cross point
+        if (isZero(nP0Q0 )){
             return null;
         }
-        Vector P0_Q=q0.subtract(P0);
-        double t=alignZero(n.dotProduct(P0_Q)/nv);
-        //if t < 0 the array point to the opposite direction
-        // if t==0 the ray origin lay with ×”×§×¨×Ÿ ×œ× ×‘×›×™×•×•×Ÿ ×©×× ×—× ×• ×¨×•×¦×™×
-        if(t > 0)
+
+        //denominator of to summarise of parameter t
+        //nv is 0 if n and v are orthogonal
+        double nv = alignZero(n.dotProduct(v));
+
+        // check if ray is lying in the plane axis
+        if(isZero(nv))
         {
-            Point P=P0.add(v.scale(t));
-            return List.of(P);
+            return null;
         }
 
-        return null;
+        double t= nP0Q0/nv;
+        // make sure that t is more than 0
+        if(isZero(alignZero(t)) || t<0){
+            return null;
         }
+        Point point = ray.getPoint(t);
 
+        return List.of(point);
+    }
 }
