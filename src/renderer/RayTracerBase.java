@@ -7,7 +7,7 @@ import scene.Scene;
 public abstract class RayTracerBase {
    // protected field Scene
     protected Scene scene;
-    //contructor
+    //contructora
     public RayTracerBase(Scene scene1){this.scene= scene1;}
 
     public abstract Color traceRay(Ray ray);
