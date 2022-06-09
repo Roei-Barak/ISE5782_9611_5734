@@ -4,6 +4,7 @@ import primitives.Color;
 import primitives.Double3;
 /*
 * Ambient Light for all objects in 3D space
+* michael and roi
 */
 public class AmbientLight {
 

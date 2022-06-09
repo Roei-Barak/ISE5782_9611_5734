@@ -147,25 +147,7 @@ public class Camera {
     }
 
     public void renderImage() {
-        try {
-            if (imageWriter == null) {
-                throw new MissingResourceException("missing resource", ImageWriter.class.getName(), "");
-            }
-            if (rayTracer == null) {
-                throw new MissingResourceException("missing resource", RayTracer.class.getName(), "");
-            }
-
-            //rendering the image
-            int nX = imageWriter.getNx();
-            int nY = imageWriter.getNy();
-            for (int i = 0; i < nY; i++) {
-                for (int j = 0; j < nX; j++) {
-                    imageWriter.writePixel(j, i, castRay(nX, nY, j, i));
-                }
-            }
-        } catch (MissingResourceException e) {
-            throw new UnsupportedOperationException("Not implemented yet" + e.getClassName());
-        }
+        //to do
     }
 
     private Color castRay(int nX, int nY, int j, int i) {
