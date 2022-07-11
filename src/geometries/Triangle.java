@@ -1,48 +1,60 @@
 package geometries;
-import primitives.*;
 
+import primitives.Point;
+import primitives.Ray;
+import primitives.Vector;
+
+import java.util.ArrayList;
 import java.util.List;
 
+import static primitives.Util.isZero;
 
+/**
+ *
+ * @author Michael and Roi
+ */
+public class Triangle extends Polygon {
+    public Triangle(Point p1, Point p2, Point p3) {
+        super(p1, p2, p3);
+    }
 
-    public class Triangle extends Polygon {  //implements Geometry
+    /***
+     * implementation of findIntersections from Geometry
+     * @param ray - ray pointing towards the graphic object
+     * @return Intersections between the ray and the geometry.
+     */
+    @Override
+    public List<Point> findIntersections(Ray ray) {
 
-        public Triangle(Point p1, Point p2, Point p3) {
-            super(p1, p2, p3);
+        List<Vector> lst = new ArrayList<Vector>();
+
+        Point pr = ray.getP0();
+        Vector v = ray.getDir();
+
+        for (Point p : super.vertices) {
+            Point pHelp = p.subtract(pr);
+            lst.add(new Vector(pHelp.get_xyz()));
+        }
+        //ask: if someone is vector 0? what happened?--------------------------------------------
+        Vector n1 = lst.get(0).crossProduct(lst.get(1)).normalize();
+        Vector n2 = lst.get(1).crossProduct(lst.get(2)).normalize();
+        Vector n3 = lst.get(2).crossProduct(lst.get(0)).normalize();
+
+        double d1 = v.dotProduct(n1);
+        double d2 = v.dotProduct(n2);
+        double d3 = v.dotProduct(n3);
+
+        if (isZero(d1) || isZero(d2) || isZero(d3)) {
+            return null;
         }
 
-
-       public List<Point> findIntersections(Ray ray) {
-                //comment here
-                List<Point> result =plane.findIntersections( ray);
-                if(result == null)
-                    return null;
-
-                Point P0=ray.getP0();
-                Vector v=ray.getDir();
-
-                Point p1 = vertices.get(0);
-                Point p2 = vertices.get(1);
-                Point p3 = vertices.get(2);
-
-                Vector v1 = p1.subtract(P0);//(P0->p1)
-                Vector v2 = p2.subtract(P0);//(P0->p2)
-                Vector v3 = p3.subtract(P0);//(P0->p3)
-
-                Vector n1 = v1.crossProduct(v2);
-                Vector n2 = v2.crossProduct(v3);
-                Vector n3 = v3.crossProduct(v1);
-
-                double s1 = v.dotProduct(n1);
-                double s2 = v.dotProduct(n2);
-                double s3 = v.dotProduct(n3);
-
-                if((s1>0 && s2>0 && s3>0 )|| (s1<0 && s2<0 && s3<0))
-                {
-                    return result;
-                }
-                return super.findIntersections(ray);
-            }
+        //check if all the signs are same
+        if (!(d1 > 0 && d2 > 0 && d3 > 0 || d1 < 0 && d2 < 0 && d3 < 0)) {
+            return null;
         }
+
+        return plane.findIntersections(ray);
+    }
+}
 
 

@@ -1,9 +1,14 @@
 package scene;
 
-import elements.AmbientLight;
 import geometries.Geometries;
-import geometries.Geometry;
+import lighting.AmbientLight;
 import primitives.Color;
+
+/**
+ *
+ * @author Michael and Roi
+ */
+
 
 public class Scene {
 
@@ -17,7 +22,7 @@ public class Scene {
         return name;
     }
 
-    public Color getBackground() {
+    public Color getBackGround() {
         return background;
     }
 
@@ -29,7 +34,7 @@ public class Scene {
         return geometries;
     }
 
-    private Scene(SceneBuilder builder) {
+    public Scene(SceneBuilder builder) {
         name = builder.name;
         background = builder.background;
         ambientLight = builder.ambientLight;
@@ -40,15 +45,15 @@ public class Scene {
     public static class SceneBuilder {
 
         private final String name;
-        private Color background;
-        private AmbientLight ambientLight;
-        private Geometries geometries;
+        private Color background = Color.BLACK;
+        private AmbientLight ambientLight = new AmbientLight();
+        private Geometries geometries = new Geometries();
 
-        public SceneBuilder(String name){
+        public SceneBuilder(String name) {
             this.name = name;
         }
 
-        // chaining methods
+        //chaining methods
 
         public SceneBuilder setBackground(Color background) {
             this.background = background;
@@ -64,8 +69,10 @@ public class Scene {
             this.geometries = geometries;
             return this;
         }
-        public  Scene build(){
-            return new Scene(this);
+
+        public Scene build() {
+            Scene scene = new Scene(this);
+            return scene;
         }
     }
 }

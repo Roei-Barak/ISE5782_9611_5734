@@ -1,17 +1,49 @@
 package renderer;
 
+import geometries.Geometries;
 import primitives.Color;
+import primitives.Point;
 import primitives.Ray;
 import scene.Scene;
 
-public class RayTracerBasic extends RayTracer {
+import java.util.List;
+
+/**
+ *
+ * @author Michael and Roi
+ */
+
+public class RayTracerBasic extends RayTracer{
     public RayTracerBasic(Scene scene) {
         super(scene);
     }
 
-    @Override
-    Color traceRay(Ray ray) {
-        return null;
+    /***
+     * return the color of the point on the geometry
+     * @param p point on a geometry
+     * @return the color of the point
+     */
+    private Color calcColor(Point p) {
+        return scene.getAmbientLight().getIntensity();
     }
 
+    /***
+     * return the color of the point that the ray arrive to
+     * @param ray the ray that we send
+     * @return the color of the point
+     */
+    @Override
+    public Color traceRay(Ray ray) {
+        List<Point> lst= scene.getGeometries().findIntersections(ray);
+
+        if(lst == null){
+            return scene.getBackGround();
+        }
+        Point closetPoint = ray.findClosestPoint(lst);
+        return calcColor(closetPoint);
+    }
+
+
+
 }
+

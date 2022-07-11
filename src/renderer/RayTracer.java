@@ -5,13 +5,28 @@ import primitives.Point;
 import primitives.Ray;
 import scene.Scene;
 
+/**
+ * abstract class Ray Tracer
+ */
+
+/**
+ *
+ * @author Michael and Roi
+ */
 public abstract class RayTracer {
+
     protected Scene scene;
 
-    protected RayTracer(Scene scene) {
-        this.scene=scene;
+    public RayTracer(Scene scene) {
+        this.scene = scene;
     }
-    abstract Color traceRay(Ray ray);
+
+    /**
+     * the fanction get a ray and reyurn the color of the ray attach
+     * @param ray
+     * @return
+     */
+    abstract public Color traceRay(Ray ray);
 
     private Color calcColor(Point point) {
         return scene.ambient.getIntensity();

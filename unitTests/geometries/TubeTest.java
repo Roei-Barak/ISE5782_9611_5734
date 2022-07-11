@@ -14,29 +14,29 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 
-class TubeTest {
 
+class TubeTest {
+    /**
+     * Test method for {@link geometries.Tube#getNormal(primitives.Point)}.
+     */
     @Test
     void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
-        // TC01: There is a simple single test here
-        Tube tube = new Tube( new Ray(new Point(0, 0, 1), new Vector(0, -1, 0)),1.0);
-
-        Vector normal = tube.getNormal(new Point(0, 0.5, 2)).normalize();
-
-        double dotProduct = normal.dotProduct(tube.getAxisRay().getDir());
-        assertEquals(0d, dotProduct, "normal is not orthogonal to the tube");
-
-        boolean firstnormal = new Vector(0, 0, 1).equals(normal);
-        boolean secondtnormal = new Vector(0, 0, -1).equals(normal);
-
-        assertTrue(firstnormal || secondtnormal, "Bad normal to tube");
-
-        assertEquals(new Vector(0, 0, 1), normal, "Bad normal to tube");
-
-        // =============== Boundary Values Tests ==================
-        Tube t = new Tube(new Ray(new Point(1,1,1), new Vector(0,0,1)), 2.0);
-        assertEquals(new Vector(1,1,0).normalize(),t.getNormal(new Point(2,2,2)));
+        Tube t = new Tube(1.0, new Ray(new Point(1, 0, 0), new Vector(0, 0, 1)));
+        Vector norm = t.getNormal(new Point(1, 1, 3));
+        //make sure that the norm is normalize to the axis ray
+        double res = norm.dotProduct(t.axisRay.getDir());
+        assertEquals(0d, res, "normal is not orthogonal to the tube");
+        //check that the normal is right
+        assertEquals(new Vector(0, 1, 0), norm, "bad normalize in tube");
     }
 
+    /**
+     * Test method for {@link geometries.Tube#findIntersections(Ray ray)}.
+     */
+    @Test
+    public void testfindIntersectionsRay() {
+
+
+    }
 }

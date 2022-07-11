@@ -1,51 +1,65 @@
 package primitives;
 
-import primitives.Point;
-import primitives.Vector;
-
 import java.util.List;
 import java.util.Objects;
 
+import static primitives.Util.isZero;
 /**
- * class Ray
  *
- * @authors Michael @ Roy
+ * @author Michael and Roi
  */
-
 public class Ray {
-    private Point p0;
-    private Vector dir;
+    final private Point p0;
+    final private Vector dir;
 
-    /**
-     * full constructor
-     * @param p0 point
-     * @param dir vector
+    /***
+     * constractor with params
+     * @param  p-Point
+     * @param d-Vector
      */
-    public Ray(Point p0, Vector dir) {
-        this.p0 = p0;
-        this.dir = dir.normalize();
+    public Ray( Point p, Vector d)
+    {
+        p0=new Point(p.get_xyz());
+        dir=new Vector(d.get_xyz()).normalize() ;
     }
 
-    // getters
+    /***
+     * print the elements
+     * @return string
+     */
+    @Override
+    public String toString() {
+        return "Ray{" +
+                "p0=" + p0 +
+                ", dir=" + dir +
+                '}';
+    }
 
+    /***
+     *
+     * @return p0
+     */
     public Point getP0() {
         return p0;
     }
-
-    public Point getPoint(double t) {
-        return new Point(p0.getX()+(dir.scale(t).getX()),
-                p0.getY()+(dir.scale(t).getY()),
-                p0.getZ()+(dir.scale(t).getZ()));
-    }
-
-
+    /***
+     *
+     * @return dir
+     */
     public Vector getDir() {
         return dir;
     }
 
-    @Override
-    public String toString() {
-        return "Ray{" + p0 + " " + dir + '}';
+    /***
+     *
+     * @param d-object to compare
+     * @return true if they are equal
+     */
+    public Point getPoint(double d){
+        if(isZero(d)){
+            return p0;
+        }
+        return p0.add(dir.scale(d));
     }
 
     @Override
@@ -53,29 +67,38 @@ public class Ray {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ray ray = (Ray) o;
-        return p0.equals(ray.p0) && dir.equals(ray.dir);
+        return Objects.equals(p0, ray.p0) && Objects.equals(dir, ray.dir);
     }
 
+    /**
+     * find the closet point
+     * @param lst list of points
+     * @return the closet point
+     */
+    public Point findClosestPoint (List<Point> lst)
+    {
+        if (lst==null||lst.isEmpty())
+            return null;
+
+        double min= p0.distance(lst.get(0));
+        Point pMin= lst.get(0);
+        lst.remove(0);
+
+        while(!lst.isEmpty()){
+            Point p=lst.get(0);
+            double length = p0.distance(p);
+            if (length<min){
+                min=length;
+                pMin = lst.get(0);
+            }
+            lst.remove(0);
+        }
+        return pMin;
+    }
+    /*
     @Override
     public int hashCode() {
         return Objects.hash(p0, dir);
     }
-
-    public Point findClosestPoint(List<Point> pointsList) {
-
-        if (pointsList == null) {
-            return null;
-        }
-        double closestDistance = Double.MAX_VALUE;
-        Point closestPoint = null;
-
-        for (Point i : pointsList) {
-            double distance = p0.distance(i);
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closestPoint = i;
-            }
-        }
-        return closestPoint;
-    }
+     */
 }

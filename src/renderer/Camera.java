@@ -4,169 +4,231 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import scene.Scene;
 
-import java.util.MissingResourceException;
-import java.util.Objects;
-
-import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
- *  camera class
  *
- * @author Michale & Roi
+ * @author Michael and Roi
  */
-public class Camera {
 
-    private Vector vRight;
+public class Camera {
+    private Point place;
     private Vector vTo;
     private Vector vUp;
-    private Point p0;
+    private Vector vRight;
     private double distance;
-    private int width;
-    private int height;
+    private double width;
+    private double height;
     private ImageWriter imageWriter;
     private RayTracer rayTracer;
 
-
-    // counstructor
-    public Camera (Point p0, Vector vto, Vector vup){
-        // throw error if not orthogonal
-
-        if(!isZero(vto.dotProduct(vup))){
-            throw new IllegalArgumentException("vUp and vTo are not orthogonal");
+    /***
+     * constructor of camera check the vectors up and to are orthogonal
+     * @param p place
+     * @param up vector up
+     * @param to vector to
+     */
+    public Camera(Point p, Vector to, Vector up) {
+        if (!isZero(up.dotProduct(to))) {
+            throw new IllegalArgumentException();
         }
 
-        this.p0 = p0;
+        vTo = to.normalize();
+        vUp = up.normalize();
 
-//        normalyze the vectors
-        this.vTo = vto.normalize();
-        this.vUp = vup.normalize();
-        this.vRight = vTo.crossProduct(vUp).normalize();
-    }
+        vRight = vTo.crossProduct(vUp);
 
+        place = p;
 
-    public Camera setVPDistance(double distance) {
-        this.distance = distance;
-        return this;
-    }
-
-    public Camera setVPSize(int w, int h) {
-
-        this.width = w;
-        this.height = h;
-        return this;
     }
 
     /**
-     * source: course presentation page 27
-     * @param nX
-     * @param nY
-     * @param j
-     * @param i
-     * @return Ray
-     */
-
-    public Ray constructRay(int nX, int nY, int j, int i) { // name was: constructRayThroughPixel
-
-        //    ratio:Pixel width & height
-        double rX = (double)(width / nX);
-        double rY = (double)(height / nY);
-        //    Image center
-
-        Point pc = p0.add(vTo.scale(distance));
-
-        double yI = alignZero((((nY - 1) / 2d) - i) * rY);
-        double xJ = alignZero((j - ((nX - 1) / 2d)) * rX);
-
-        Point pIJ = pc;
-        if (xJ != 0)
-            pIJ = pIJ.add(vRight.scale(xJ));
-        if (yI != 0)
-            pIJ = pIJ.add(vUp.scale(yI));
-
-        return new Ray(p0, pIJ.subtract(p0));
-    }
-
-    /**
-     * An override to check if two cameras positioned in the same location with the
-     * same directions in vectors.
+     * set the size of view plane
      *
-     * @param obj - An object to compare to this camera.
-     * @return True if: same camera or same fields. else, false.
+     * @param width  width of the view plane
+     * @param height height of the view plane
+     * @return camera
      */
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this)
-            return true;
-        if (!(obj instanceof Camera)) {
-            return false;
-        }
-        Camera camera = (Camera) obj;
-        return p0.equals(camera.p0) && vTo.equals(camera.vTo) && vUp.equals(camera.vUp)
-                && vRight.equals(camera.vRight) && width == camera.width && height == camera.height
-                && distance == camera.distance;
+    public Camera setVPSize(double width, double height) {
+        this.width = width;
+        this.height = height;
+        return this;
     }
 
-    public Vector getvRight() {
-        return vRight;
+    /**
+     * set the distance of the view plane from the camera
+     *
+     * @param d double
+     * @return camera
+     */
+    public Camera setVPDistance(double d) {
+        distance = d;
+        return this;
     }
 
-    public Vector getvTo() {
+    /**
+     * return the place
+     *
+     * @return place
+     */
+    public Point getPlace() {
+        return place;
+    }
+
+    /**
+     * return the v to
+     *
+     * @return
+     */
+    public Vector getVTo() {
         return vTo;
     }
 
-    public Vector getvUp() {
+    /**
+     * return the v up
+     *
+     * @return
+     */
+    public Vector getVUp() {
         return vUp;
     }
 
-    public Point getP0() {
-        return p0;
+    /**
+     * return the vRight
+     *
+     * @return
+     */
+    public Vector getVRight() {
+        return vRight;
     }
 
+    /**
+     * return distance
+     *
+     * @return
+     */
     public double getDistance() {
         return distance;
     }
 
-    public int getWidth() {
+    /**
+     * return width
+     *
+     * @return
+     */
+    public double getWidth() {
         return width;
     }
 
-    public int getHeight() {
+    /**
+     * return Height
+     *
+     * @return
+     */
+    public double getHeight() {
         return height;
     }
 
+    /**
+     * calaulate and return the ray from the camera to the specific pixel
+     *
+     * @param nX-   Pixel size in a row
+     * @param nY-   Pixel size in a column
+     * @param j-The number of pixels to move in a row
+     * @param i-The number of pixels to move in a column
+     * @return the ray from the camera to the specific pixel
+     */
+    public Ray constructRay(int nX, int nY, int j, int i) {
+
+        Point Pc = place.add(vTo.scale(distance));
+
+        double Ry = height / nY;
+        double Rx = width / nX;
+
+        double yi = -(i - (nY - 1) / 2d) * Ry;
+        double xj = (j - (nX - 1) / 2d) * Rx;
+
+        Point pij = Pc;
+
+        //if there is no moving
+        if (isZero(xj) && isZero(yi)) {
+            return new Ray(place, pij.subtract(place));
+        }
+        //if the moving is only at column
+        if (isZero(xj)) {
+            pij = pij.add(vUp.scale(yi));
+            return new Ray(place, pij.subtract(place));
+        }
+        //if the moving is only at row
+        if (isZero(yi)) {
+            pij = pij.add(vRight.scale(xj));
+            return new Ray(place, pij.subtract(place));
+        }
+        //pij is the point after the moving
+        pij = pij.add(vRight.scale(xj).add(vUp.scale(yi)));
+
+
+        return new Ray(place, pij.subtract(place));
+
+
+    }
+
+    /**
+     * set ImageWriter
+     *
+     * @param imageWriter
+     * @return
+     */
     public Camera setImageWriter(ImageWriter imageWriter) {
         this.imageWriter = imageWriter;
         return this;
     }
 
+    /***
+     * set RayTracer
+     * @param rayTracer
+     * @return
+     */
     public Camera setRayTracer(RayTracer rayTracer) {
         this.rayTracer = rayTracer;
         return this;
     }
 
+    /**
+     * build the image with printing the geometries and the background
+     */
     public void renderImage() {
-        //to do
+        if (place == null || vTo == null || vUp == null || vRight == null || width == 0 || height == 0 || imageWriter == null || rayTracer == null)
+            throw new UnsupportedOperationException();
+        int Nx = imageWriter.getNx();
+        int Ny = imageWriter.getNy();
+//        double interval = Nx / width;  //׳™׳›׳•׳ ׳׳”׳™׳•׳× ׳¦׳¨׳™׳ ׳׳—׳׳§ ׳‘׳’׳•׳‘׳” ׳•׳׳ ׳‘׳¨׳•׳—׳‘
+        for (int i = 0; i < Ny; i++) {
+            for (int j = 0; j < Nx; j++) {
+                castRay(Nx, Ny, i, j);
+            }
+        }
+        imageWriter.writeToImage();
+
     }
 
-    private Color castRay(int nX, int nY, int j, int i) {
-        Ray ray = constructRay(nX, nY, j, i);
-        primitives.Color pixelColor = rayTracer.traceRay(ray);
-        return pixelColor;
+    private void castRay(int Nx, int Ny, int i, int j) {
+        Ray ray = constructRay(Nx, Ny, j, i);
+        Color pixelColor = rayTracer.traceRay(ray);
+        imageWriter.writePixel(j, i, pixelColor);
     }
+
 
     public void writeToImage() {
         imageWriter.writeToImage();
     }
 
     public void printGrid(int interval, Color color) {
-        for (int i = 0; i < imageWriter.getNx(); i++) {
-            for (int j = 0; j < imageWriter.getNy(); j++) {
-                if (i % 50 == 0 || j % 50 == 0) {
-                    imageWriter.writePixel(i, j, color);
-                }
-            }
-        }
+//        if (color == null)
+//            throw new UnsupportedOperationException();
+        imageWriter.printGrid(interval, color);
     }
+
 }
