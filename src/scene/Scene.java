@@ -11,6 +11,7 @@ public class Scene {
     private final Color background;
     private final AmbientLight ambientLight;
     private final Geometries geometries;
+    public AmbientLight ambient;
 
     public String getName() {
         return name;

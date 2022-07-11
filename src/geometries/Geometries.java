@@ -51,7 +51,7 @@ public class Geometries implements Intersectable, Iterable<Geometry> {
 
         /************* Methods ***************/
 
-        public void add_geometries(Intersectable... geometries) {
+        public void add(Intersectable... geometries) {
             for (Intersectable geometry: geometries) {
                 geometriesList.add((Geometry) geometry);
             }

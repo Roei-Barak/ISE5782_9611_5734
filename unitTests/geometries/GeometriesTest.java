@@ -31,7 +31,7 @@ class GeometriesTest {
     @Test
     void add_geometries() {
         Geometries geometries = new Geometries();
-        geometries.add_geometries(sphere1, sphere2);
+        geometries.add(sphere1, sphere2);
         assertEquals(2, geometries.get_GeometriesList().size()); // test number of geometries
         assertEquals(sphere1, geometries.get_GeometriesList().get(0)); // test the addition of first geometry
         assertEquals(sphere2, geometries.get_GeometriesList().get(1));// test the addition of second geometry
@@ -44,7 +44,7 @@ class GeometriesTest {
 
         //the 2 geometries doesnt have a point of contact
         Geometries geometries2 = new Geometries();
-        geometries2.add_geometries(sphere1, sphere3);
+        geometries2.add(sphere1, sphere3);
         ArrayList<Geometry> expected2 = new ArrayList<>();
 //        expected2.add(new Geometry(sphere1, new Point(-4,0,0)));//sphere1
 //        expected2.add(new Geometry(sphere1, new Point(4,0,0)));//sphere1

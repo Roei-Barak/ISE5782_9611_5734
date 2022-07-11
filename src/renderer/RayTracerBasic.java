@@ -13,4 +13,5 @@ public class RayTracerBasic extends RayTracer {
     Color traceRay(Ray ray) {
         return null;
     }
+
 }
