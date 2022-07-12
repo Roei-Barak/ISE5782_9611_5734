@@ -20,6 +20,18 @@ public class Double3 {
 	 */
 	public static final Double3 ZERO = new Double3(0, 0, 0);
 
+	public double get_x() {
+		return d1;
+	}
+
+	public double get_y() {
+		return d2;
+	}
+
+	public double get_z() {
+		return d3;
+	}
+
 	/**
 	 * Constructor to initialize Double3 based object with its three number values
 	 * 

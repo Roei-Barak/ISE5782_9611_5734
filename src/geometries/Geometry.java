@@ -1,5 +1,6 @@
 package geometries;
 
+import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
 
@@ -14,5 +15,7 @@ public abstract class Geometry extends Intersectable {
      * @param point point outside the grophic shape
      * @return nomal vector {@link Vector}
      */
+    protected Color emission = Color.BLACK;
+
     public abstract Vector getNormal(Point point);
 }

@@ -5,12 +5,15 @@ import primitives.Vector;
 
 import java.util.List;
 
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
+
 /**
  *
  * @author Michael and Roi
  */
 
-public class Tube implements Geometry{
+public class Tube extends Geometry {
     final double radius;
     final Ray axisRay;
 
@@ -39,8 +42,19 @@ public class Tube implements Geometry{
      * @param ray - ray pointing towards the graphic object
      * @return Intersections between the ray and the geometry.
      */
+
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        double nv = axisRay.getDir().dotProduct(ray.getDir());
+        if (isZero(nv) || ray.getP0() == axisRay.getP0()){
+            return null;
+        }
+        Vector vec = axisRay.getP0().subtract(ray.getP0());
+        double nQMinusP0 = axisRay.getDir().dotProduct(vec);
+        double t  = alignZero(nQMinusP0 / nv);
+        if (t > 0 ){
+            return List.of(new GeoPoint(this,ray.getPoint(t)));
+        }
         return null;
     }
 }
