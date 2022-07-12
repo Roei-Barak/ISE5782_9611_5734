@@ -1,102 +1,100 @@
 package geometries;
+
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
-import static primitives.Util.alignZero;
-
-/**
- *
- * @author Michael and Roi
- */
 public class Sphere extends Geometry {
-    final Point center;
-    final double radius;
+    private final Point center;
+    private final double radius;
 
-    public Sphere(Point p, double r){
-        center =new Point(p.get_xyz());
-        radius= r;
+    public Sphere(Point center, double radius) {
+        this.center = center;
+        this.radius = radius;
+    }
+
+    public Point getCenter() {
+        return this.center;
+    }
+
+    public double getRadius() {
+        return this.radius;
     }
 
     @Override
-    public Vector getNormal(Point p) {
-        Point pn = p.subtract(center);
-        Vector norm = new Vector(pn.get_xyz());
-        return norm.normalize();
+    public String toString() {
+        return "Sphere{" +
+                "center=" + center +
+                ",radius=" + radius +
+                '}';
     }
-    /***
-     * implementation of findIntersections from Geometry
-     * @param ray - ray pointing towards the graphic object
-     * @return Intersections between the ray and the geometry.
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sphere sphere = (Sphere) o;
+        return Double.compare(sphere.radius, this.radius) == 0 && this.center.equals(sphere.center);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.center, this.radius);
+    }
+
+    /**
+     * Return the normal to the sphere in the receiving point
+     * @param point Point on the sphere
+     * @return Normal to the sphere in the receiving point (Vector)
      */
-//    @Override
-//    public List<Point> findIntersections(Ray ray) {
-//
-//        Point P0 = ray.getP0();
-//        //check the cae that the point is on the center
-//        if (P0.equals(center)) {
-//            return List.of(center.add(ray.getDir().scale(radius)));
-//        }
-//
-//        Vector u = this.center.subtract(P0);
-//
-//        double tm = ray.getDir().dotProduct(u);
-//        double d = Math.sqrt(u.lengthSquared()-Math.pow(tm,2));
-//        if (d>=radius)
-//            return null;
-//        double th = Math.sqrt(Math.pow(radius,2)-Math.pow(d,2));
-//        double t1 = tm -th;
-//        double t2 = tm +th;
-//
-//        if (t1<= 0 && t2<=0)
-//            return null;
-//
-//        List<Point> lst=new ArrayList<Point>();
-//        if (t1 >0)
-//        {
-//            Point cross_p = ray.getP0().add(ray.getDir().scale(t1));
-//            lst.add(cross_p);
-//        }
-//
-//        if (t2 >0)
-//        {
-//            Point cross_p = ray.getP0().add(ray.getDir().scale(t2));
-//            lst.add(cross_p);
-//        }
-//
-//        return lst;
-//    }
+    @Override
+    public Vector getNormal(Point point) {
+        Vector v = point.subtract(this.center);
+        return v.normalize(); //Return normalize normal vector.
+    }
 
     @Override
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
-        double tM, d;
-        try {
-            Vector u = center.subtract(ray.getP0());
-            tM = alignZero(ray.getDir().dotProduct(u));
-            d = alignZero(Math.sqrt(u.lengthSquared() - tM * tM));
-        } catch (IllegalArgumentException e) {
-            tM = 0;
-            d = 0;
+        Point p0 = ray.getP0(); // ray's starting point
+        Point O = this.center; //the sphere's center point
+        Vector V = ray.getDir(); // "the v vector" from the presentation
+
+        // if p0 on center, calculate with line parametric representation
+        // the direction vector normalized.
+        if (O.equals(p0)) {
+            Point newPoint = p0.add(ray.getDir().scale(this.radius));
+            return List.of(new GeoPoint(this,newPoint));
         }
-        if (d >= radius) {
+
+        Vector U = O.subtract(p0);
+        double tm = V.dotProduct(U);
+        double d = Math.sqrt(U.lengthSquared() - tm * tm);
+        if (d >= this.radius) {
             return null;
         }
-        double tH = alignZero(Math.sqrt(radius * radius - d * d));
-        double t1 = alignZero(tM + tH);
-        double t2 = alignZero(tM - tH);
+
+        double th = Math.sqrt(this.radius * this.radius - d * d);
+        double t1 = tm - th;
+        double t2 = tm + th;
 
         if (t1 > 0 && t2 > 0) {
-                return List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, ray.getPoint(t2)));
+            Point p1 = ray.getPoint(t1);
+            Point p2 = ray.getPoint(t2);
+            return List.of(new GeoPoint(this,p1),new GeoPoint(this,p2));
         }
+
         if (t1 > 0) {
-            return List.of(new GeoPoint(this, ray.getPoint(t1)));
+            Point p1 = ray.getPoint(t1);
+            return List.of(new GeoPoint(this,p1));
         }
+
         if (t2 > 0) {
-            return List.of(new GeoPoint(this, ray.getPoint(t2)));
+            Point p2 = ray.getPoint(t2);
+            return List.of(new GeoPoint(this,p2));
         }
-        List<Point> tentativeIntersections = new ArrayList<>();
         return null;
     }
 }

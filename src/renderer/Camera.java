@@ -204,7 +204,6 @@ public class Camera {
             throw new UnsupportedOperationException();
         int Nx = imageWriter.getNx();
         int Ny = imageWriter.getNy();
-//        double interval = Nx / width;  //׳™׳›׳•׳ ׳׳”׳™׳•׳× ׳¦׳¨׳™׳ ׳׳—׳׳§ ׳‘׳’׳•׳‘׳” ׳•׳׳ ׳‘׳¨׳•׳—׳‘
         for (int i = 0; i < Ny; i++) {
             for (int j = 0; j < Nx; j++) {
                 castRay(Nx, Ny, i, j);
@@ -214,10 +213,10 @@ public class Camera {
 
     }
 
-    private void castRay(int Nx, int Ny, int i, int j) {
-        Ray ray = constructRay(Nx, Ny, j, i);
-        Color pixelColor = rayTracer.traceRay(ray);
-        imageWriter.writePixel(j, i, pixelColor);
+
+    private Color castRay(int nX, int nY, int j, int i) {
+        Ray ray = constructRay(nX, nY, j, i);
+        return this.rayTracer.traceRay(ray);
     }
 
 
