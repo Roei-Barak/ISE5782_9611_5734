@@ -5,11 +5,13 @@ import primitives.Vector;
 
 import java.util.*;
 
+import static primitives.Util.alignZero;
+
 /**
  *
  * @author Michael and Roi
  */
-public class Sphere implements Geometry{
+public class Sphere extends Geometry {
     final Point center;
     final double radius;
 
@@ -65,5 +67,41 @@ public class Sphere implements Geometry{
         }
 
         return lst;
+    }
+
+    @Override
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        double tM, d;
+        try{
+            Vector u = center.subtract(ray.getP0());
+            tM = alignZero(ray.getDir().dotProduct(u));
+            d = alignZero(Math.sqrt(u.lengthSquared() - tM * tM));
+        } catch (IllegalArgumentException e) {
+            tM =0;
+            d = 0;
+        }
+        if (d >= radius){
+            return null;
+        }
+        double tH = alignZero(Math.sqrt(radius * radius - d * d));
+        double t1 = alignZero(tM + tH);
+        double t2 = alignZero(tM - tH);
+
+        if (t1 >0 && t2 > 0 ){
+            List<Point> tentativeIntersections = new ArrayList<>();
+            tentativeIntersections.add((ray.getPoint(t1)));
+            if (t2 > 0){
+                tentativeIntersections.add(ray.getPoint(t2));
+            }
+            return tentativeIntersections;
+
+        }else {
+            if (t2 > 0){
+                List<Point> tentativeIntersections = new ArrayList<>();
+                tentativeIntersections.add(ray.getPoint(t2));
+                return tentativeIntersections;
+            }
+        }
+        return null;
     }
 }

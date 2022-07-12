@@ -13,7 +13,7 @@ import static primitives.Util.isZero;
  *
  * @author Michael and Roi
  */
-public class Plane implements Geometry{
+public class Plane extends Geometry {
     final Point q0;
     final Vector normal;
 
@@ -37,7 +37,7 @@ public class Plane implements Geometry{
 
         Vector N = U.crossProduct(V);
 
-        //right hand rule
+        //right-hand rule
         normal = N.normalize();;
     }
 
@@ -56,7 +56,7 @@ public class Plane implements Geometry{
 
     /***
      * implementation of getNormal
-     * @param point point outside the grophic shape
+     * @param point point outside the graphic shape
      * @return normal of the plane in the point
      */
     @Override
@@ -64,13 +64,56 @@ public class Plane implements Geometry{
         return getNormal();
     }
 
-    /***
-     * implementation of findIntersections from Geometry
-     * @param ray - ray pointing towards the graphic object
-     * @return Intersections between the ray and the geometry.
-     */
+//    /***
+//     * implementation of findIntersections from Geometry
+//     * @param ray - ray pointing towards the graphic object
+//     * @return Intersections between the ray and the geometry.
+//     */
+//    @Override
+//    public List<Point> findIntersections(Ray ray) {
+//
+//        Vector n = normal;
+//        Vector v = ray.getDir();
+//        Point p0 = ray.getP0();
+//
+//        //check if the point of the ray is same to the point of the plane
+//        if(q0.equals(p0)){
+//            return  null;
+//        }
+//
+//        Vector P0_Q0 = q0.subtract(p0);
+//
+//        //numerator of to summarise of parameter t
+//        double nP0Q0  = alignZero(n.dotProduct(P0_Q0));
+//
+//        //check if p0 is on the plane
+//        //if the dot-product among P0_Q0 and n is 0, so p0 is on the plane and there is no cross point
+//        if (isZero(nP0Q0 )){
+//            return null;
+//        }
+//
+//        //denominator of to summarise of parameter t
+//        //nv is 0 if n and v are orthogonal
+//        double nv = alignZero(n.dotProduct(v));
+//
+//        // check if ray is lying in the plane axis
+//        if(isZero(nv))
+//        {
+//            return null;
+//        }
+//
+//        double t= nP0Q0/nv;
+//        // make sure that t is more than 0
+//        if(isZero(alignZero(t)) || t<0){
+//            return null;
+//        }
+//        Point point = ray.getPoint(t);
+//
+//        return List.of(point);
+//    }
+
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
 
         Vector n = normal;
         Vector v = ray.getDir();
@@ -109,6 +152,6 @@ public class Plane implements Geometry{
         }
         Point point = ray.getPoint(t);
 
-        return List.of(point);
+        return List.of(new GeoPoint(this,ray.getPoint(t)));
     }
 }

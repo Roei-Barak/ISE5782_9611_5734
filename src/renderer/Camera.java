@@ -225,9 +225,22 @@ public class Camera {
         imageWriter.writeToImage();
     }
 
+    /***
+     * Create a grid [over the picturel in the pixel color map. given the grid's
+     * interval and color
+     *
+     * @param interval grid's step
+     * @param color grid's color
+     */
     public void printGrid(int interval, Color color) {
-//        if (color == null)
-//            throw new UnsupportedOperationException();
+        for (int i = 0; i < imageWriter.getNy(); i++){
+            for(int j= 0 ; j <imageWriter.getNy(); j++){
+                if (i % interval == 0 || j % interval == 0){
+                    imageWriter.writePixel(i,j,color);
+                }
+            }
+        }
+
         imageWriter.printGrid(interval, color);
     }
 
