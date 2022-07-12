@@ -5,20 +5,21 @@ import primitives.Ray;
 import scene.Scene;
 
 /**
- * abstract class Ray Tracer
+ * class used to trace rays for the rendering engine
  */
 
-/**
- *
- * @author Michael and Roi
- */
 public abstract class RayTracer {
-
+    /***
+     * scene to be rendered
+     */
     protected Scene scene;
 
-    public RayTracer(Scene scene) {
-        this.scene = scene;
-    }
+    /***
+     * constructor for the ray tracer
+     * @param scene to be intersected
+     */
+
+    public RayTracer(Scene scene) {this.scene = scene;}
 
     /**
      * the fanction get a ray and reyurn the color of the ray attach
