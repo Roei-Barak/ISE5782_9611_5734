@@ -13,7 +13,7 @@ import static primitives.Util.isZero;
  *
  * @author Michael and Roi
  */
-public class Plane implements Geometry{
+public class Plane extends Geometry{
     final Point q0;
     final Vector normal;
 
@@ -110,5 +110,10 @@ public class Plane implements Geometry{
         Point point = ray.getPoint(t);
 
         return List.of(point);
+    }
+
+    @Override
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        return null;
     }
 }

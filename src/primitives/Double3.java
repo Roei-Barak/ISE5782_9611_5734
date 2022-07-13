@@ -15,6 +15,18 @@ public class Double3 {
 	final double d2;
 	final double d3;
 
+	public double get_x() {
+		return d1;
+	}
+
+	public double get_y() {
+		return d2;
+	}
+
+	public double get_z() {
+		return d3;
+	}
+
 	/**
 	 * Zero triad (0,0,0)
 	 */

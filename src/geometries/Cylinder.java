@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Michael and Roi
  */
-public class Cylinder implements Geometry{
+public class Cylinder extends Geometry{
     final double height;
 
     public Cylinder(double h) {height=h;}
@@ -27,6 +27,11 @@ public class Cylinder implements Geometry{
      */
     @Override
     public List<Point> findIntersections(Ray ray) {
+        return null;
+    }
+
+    @Override
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         return null;
     }
 }

@@ -5,16 +5,11 @@ import primitives.Double3;
 
 /**
  * ambient light for all graghic objects
+ * extend from light and heir the intensity
  */
-
-/**
- *
- * @author Michael and Roi
- */
-public class AmbientLight {
+public class AmbientLight extends Light{
 
 
-    private  final Color intensity;  //light intensity as color
 
     /**
      * primary constractor
@@ -22,7 +17,7 @@ public class AmbientLight {
      * @param Ka attention
      */
     public AmbientLight(Color Ia, Double3 Ka){
-        intensity= Ia.scale(Ka);
+        super(Ia.scale(Ka));
     }
 
 
@@ -30,16 +25,11 @@ public class AmbientLight {
      * default constractor
      */
     public AmbientLight(){
-        intensity=Color.BLACK;
+
+        super(Color.BLACK);
     }
 
-    /**
-     * getter from intensity
-     * @return actual intensity
-     */
 
-    public Color getIntensity() {
-        return intensity;
-    }
+
 
 }
