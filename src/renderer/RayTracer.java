@@ -6,30 +6,30 @@ import primitives.Ray;
 import scene.Scene;
 
 /**
- * class used to trace rays for the rendering engine
+ * abstract class Ray Tracer
  */
 
+/**
+ *
+ * @author Michael and Roi
+ */
 public abstract class RayTracer {
-    /***
-     * scene to be rendered
-     */
+
     protected Scene scene;
 
-    /**
-     * Constructor that get a scene
-     * @param scene
-     */
-    public RayTracer(Scene scene){
+    public RayTracer(Scene scene) {
         this.scene = scene;
     }
 
     /**
-     * trace the ray and calculate the rey's intersection point color
-     * and any other object (or the background if the rey's intersection point
-     * doesn't exist)
-     *
+     * the fanction get a ray and reyurn the color of the ray attach
      * @param ray
      * @return
      */
-    abstract Color traceRay(Ray ray);
+    abstract public Color traceRay(Ray ray);
+
+    private Color calcColor(Point point) {
+        return scene.getAmbientLight().getIntensity();
+    }
+
 }
