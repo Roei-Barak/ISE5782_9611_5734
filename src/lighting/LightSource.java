@@ -5,17 +5,19 @@ import primitives.Point;
 import primitives.Vector;
 
 public interface LightSource {
-    /**
-     * Get the intensity of the light at a point
-     * @param p origin of the light
-     * @return the intensity
+    /***
+     * calaulate the intensity in specific point
+     * @param p specific point
+     * @return the intensity in this point
      */
     public Color getIntensity(Point p);
 
-    /**
-     * Get the direction of the light from a point
-     * @param p the point
-     * @return the direction
+    /***
+     * light vector
+     * @param p position of the point
+     * @return normalize vector from the position to the point
      */
     public Vector getL(Point p);
+
+
 }

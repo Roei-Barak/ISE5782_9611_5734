@@ -130,4 +130,9 @@ public class Polygon extends Geometry {
 			}
 			return List.of(new GeoPoint(this,tentativeIntersection.get(0).point));
 	}
+
+	@Override
+	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+		return null;
+	}
 }

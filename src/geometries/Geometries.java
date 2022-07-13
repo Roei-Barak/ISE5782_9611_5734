@@ -3,46 +3,49 @@ package geometries;
 import primitives.Point;
 import primitives.Ray;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Composite class for all geometries object implementing {@link Intersectable}
- */
 public class Geometries extends Intersectable {
-    List<Intersectable> intersectables;
+
+    private List<Intersectable> shapes = null;
 
     public Geometries() {
-        intersectables = new LinkedList<Intersectable>();
+        shapes = new LinkedList<>();
     }
 
-    public Geometries(Intersectable... intersectables) {
-        this.intersectables = new LinkedList<Intersectable>();
-        Collections.addAll(this.intersectables, intersectables);
+    public Geometries(Intersectable... geometries) {
+        this();
+        add(geometries);
     }
 
-    public void add(Intersectable... intersectables) {
-        Collections.addAll(this.intersectables, intersectables);
+    public void add(Intersectable... geometries) {
+        if (shapes == null) {
+            throw new IllegalStateException("list not created");
+        }
+        for (Intersectable i : geometries)
+            shapes.add(i);
     }
 
     @Override
-    //=== find intersection point between a geometry (we know now) and the ray ===//
-    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
-
-        List<GeoPoint> intersection = null;
-
-        for (Intersectable geometry : this.intersectables) { // loop on all the geometry that implement "the Intersectables"
-            // list of crossing point between the ray ana the geometry//
-            var geoIntersections = geometry.findGeoIntersections(ray);
-            if (geoIntersections != null) { // if there is a crossing
-                if (intersection == null) {
-                    intersection = new LinkedList<>();
+    public List<Point> findIntersections(Ray ray) {
+        List<Point> lst = null;
+        for (Intersectable shape : shapes) {
+            List<Point> shapeList = shape.findIntersections(ray);
+            if (shapeList != null) {
+                if (lst == null) {
+                    lst = new LinkedList<>();
                 }
-                intersection.addAll(geoIntersections);
+                lst.addAll(shapeList);
             }
         }
-
-        return intersection;
+        return lst;
     }
+
+    @Override
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        return null;
+    }
+
 }

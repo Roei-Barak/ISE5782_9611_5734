@@ -1,25 +1,19 @@
 package lighting;
 
-
 import primitives.Color;
 
-/**
- * Light abstract class
- */
 abstract class Light {
-    private Color intensity; //light intensity as color
 
-    /***
-     * Constructor
-     * @param intensity
-     */
-    protected Light(Color intensity) {
-        this.intensity = intensity;
+
+    private Color intensity;//light intensity as color
+    protected Light(Color c)
+    {
+        intensity=c;
     }
 
-    /***
-     * Getter
-     * @return intensity
+    /**
+     * getter from intensity
+     * @return actual intensity
      */
     public Color getIntensity() {
         return intensity;
