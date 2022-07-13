@@ -204,7 +204,6 @@ public class Camera {
             throw new UnsupportedOperationException();
         int Nx = imageWriter.getNx();
         int Ny = imageWriter.getNy();
-//        double interval = Nx / width;  //׳™׳›׳•׳ ׳׳”׳™׳•׳× ׳¦׳¨׳™׳ ׳׳—׳׳§ ׳‘׳’׳•׳‘׳” ׳•׳׳ ׳‘׳¨׳•׳—׳‘
         for (int i = 0; i < Ny; i++) {
             for (int j = 0; j < Nx; j++) {
                 castRay(Nx, Ny, i, j);
@@ -214,10 +213,10 @@ public class Camera {
 
     }
 
-    private void castRay(int Nx, int Ny, int i, int j) {
-        Ray ray = constructRay(Nx, Ny, j, i);
-        Color pixelColor = rayTracer.traceRay(ray);
-        imageWriter.writePixel(j, i, pixelColor);
+
+    private Color castRay(int nX, int nY, int j, int i) {
+        Ray ray = constructRay(nX, nY, j, i);
+        return this.rayTracer.traceRay(ray);
     }
 
 
@@ -225,9 +224,22 @@ public class Camera {
         imageWriter.writeToImage();
     }
 
+    /***
+     * Create a grid [over the picturel in the pixel color map. given the grid's
+     * interval and color
+     *
+     * @param interval grid's step
+     * @param color grid's color
+     */
     public void printGrid(int interval, Color color) {
-//        if (color == null)
-//            throw new UnsupportedOperationException();
+        for (int i = 0; i < imageWriter.getNy(); i++){
+            for(int j= 0 ; j <imageWriter.getNy(); j++){
+                if (i % interval == 0 || j % interval == 0){
+                    imageWriter.writePixel(i,j,color);
+                }
+            }
+        }
+
         imageWriter.printGrid(interval, color);
     }
 
