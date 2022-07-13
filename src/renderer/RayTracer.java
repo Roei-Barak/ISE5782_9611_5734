@@ -15,22 +15,21 @@ public abstract class RayTracer {
      */
     protected Scene scene;
 
-    /***
-     * constructor for the ray tracer
-     * @param scene to be intersected
+    /**
+     * Constructor that get a scene
+     * @param scene
      */
-
-    public RayTracer(Scene scene) {this.scene = scene;}
+    public RayTracer(Scene scene){
+        this.scene = scene;
+    }
 
     /**
-     * the fanction get a ray and reyurn the color of the ray attach
+     * trace the ray and calculate the rey's intersection point color
+     * and any other object (or the background if the rey's intersection point
+     * doesn't exist)
+     *
      * @param ray
      * @return
      */
-    abstract public Color traceRay(Ray ray);
-
-    private Color calcColor(Point point) {
-        return scene.ambient.getIntensity();
-    }
-
+    abstract Color traceRay(Ray ray);
 }

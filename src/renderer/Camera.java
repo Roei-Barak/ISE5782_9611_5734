@@ -6,6 +6,8 @@ import primitives.Ray;
 import primitives.Vector;
 import scene.Scene;
 
+import java.util.MissingResourceException;
+
 import static primitives.Util.isZero;
 
 /**
@@ -199,18 +201,27 @@ public class Camera {
     /**
      * build the image with printing the geometries and the background
      */
-    public void renderImage() {
-        if (place == null || vTo == null || vUp == null || vRight == null || width == 0 || height == 0 || imageWriter == null || rayTracer == null)
-            throw new UnsupportedOperationException();
-        int Nx = imageWriter.getNx();
-        int Ny = imageWriter.getNy();
-        for (int i = 0; i < Ny; i++) {
-            for (int j = 0; j < Nx; j++) {
-                castRay(Nx, Ny, i, j);
-            }
-        }
-        imageWriter.writeToImage();
+    public Camera renderImage() {
+        try {
+            if (this.imageWriter == null)
+                throw new MissingResourceException("Missing imageWriter", ImageWriter.class.getName(), "");
+            if (this.rayTracer == null)
+                throw new MissingResourceException("Missing rayTracerBase", RayTracer.class.getName(), "");
 
+            int nX = this.imageWriter.getNx();
+            int nY = this.imageWriter.getNy();
+
+            for (int i = 0; i < nY; i++) {
+                for (int j = 0; j < nX; j++) {
+                    Color pixelColor = castRay(nX, nY, j, i);
+                    this.imageWriter.writePixel(j, i, pixelColor);
+                }
+            }
+            return this;
+        }
+        catch (MissingResourceException e) {
+            throw new UnsupportedOperationException("No implementation" + e.getClassName());
+        }
     }
 
 
