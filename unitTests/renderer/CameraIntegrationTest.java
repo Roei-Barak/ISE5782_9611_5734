@@ -70,19 +70,19 @@ public class CameraIntegrationTest {
 				.setVPDistance(1)
 				.setVPSize(3, 3);
 		// TC01: Small Sphere 2 points
-		assertCountIntersections(cam1, new Sphere(new Point(0, 0, -2.5), 1.0), 2);
+		assertCountIntersections(cam1, new Sphere(1.0, new Point(0, 0, -2.5)), 2);
 
 		// TC02: Big Sphere 18 points
-		assertCountIntersections(cam1, new Sphere( new Point(0, 0, -2.5),2.5), 18);
+		assertCountIntersections(cam1, new Sphere(2.5, new Point(0, 0, -2.5)), 18);
 
 		// TC03: Medium Sphere 10 points
-		assertCountIntersections(cam1, new Sphere(new Point(0, 0, -2), 2.0), 10);
+		assertCountIntersections(cam1, new Sphere(2.0, new Point(0, 0, -2)), 10);
 
 		// TC04: Inside Sphere 9 points
-		assertCountIntersections(cam1, new Sphere(new Point(0, 0, -1), 4.0), 9);
+		assertCountIntersections(cam1, new Sphere(4.0, new Point(0, 0, -1)), 9);
 
 		// TC05: Beyond Sphere 0 points
-		assertCountIntersections(cam1, new Sphere(new Point(0, 0, 1), 0.5), 0);
+		assertCountIntersections(cam1, new Sphere(0.5, new Point(0, 0, 1)), 0);
 	}
 
 	/**

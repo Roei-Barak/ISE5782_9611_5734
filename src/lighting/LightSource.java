@@ -3,7 +3,7 @@ import primitives.*;
 /**
  * The interface represents common operations on types of light sources
  *
- * @author Malka &Achi
+ * @author Michael
  */
 public interface LightSource {
     /**

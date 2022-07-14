@@ -20,15 +20,21 @@ public class SpotLight extends PointLight {
     }
 
     /***
-     * default constractor
-     * @param d direction of the light
-     * @param intensity intensity of the light
-     * @param p position of the light source
+     * default constructor
+     *  d direction of the light
+     *  intensity intensity of the light
+     * p position of the light source
      */
     public SpotLight(Vector d, Color intensity, Point p) {
         super(intensity, p);
         direction = d;
     }
+
+    /**
+     * getter
+     * @param p
+     * @return
+     */
 
     @Override
     public Color getIntensity(Point p) {

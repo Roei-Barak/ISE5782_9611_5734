@@ -1,37 +1,51 @@
 package geometries;
-
-import primitives.Point;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
 import java.util.List;
 
 /**
- *
- * @author Michael and Roi
- */
-public class Cylinder extends Geometry{
-    final double height;
-
-    public Cylinder(double h) {height=h;}
+ *Cylinder class
+ * @author Michael & Roi
+ * */
+public class Cylinder extends  Tube {
+    private double height;
 
     @Override
-    public Vector getNormal(Point point) {
-        return null;
+    public Vector getNormal(Point point)
+    {
+        //n = normalize(P - O)
+        // O is projection of P on cylinder's ray:
+        // t = v (P ג€“ P0)
+        // O = P0 + tv
+        Point p0 = axisRay.getP0();
+        Vector v = axisRay.getDir();
+        //t = v (P ג€“ P0)
+
+        if(point.subtract(p0).dotProduct(v)==0)
+        {return v;}
+        if(point.subtract(p0.add(v.scale(height))).dotProduct(v)==0)
+        {return v;}
+        return super.getNormal(point);
+    }
+    @Override
+    public String toString() {
+        return "Cylinder{" +
+                "height=" + height +
+                "} " + super.toString();
     }
 
-    /***
-     * implementation of findIntersections from Geometry
-     * @param ray - ray pointing towards the graphic object
-     * @return Intersections between the ray and the geometry.
-     */
-    @Override
-    public List<Point> findIntersections(Ray ray) {
-        return null;
+    public Cylinder(Ray axisRay, double radius, double height) {
+        super(axisRay, radius);
+        this.height = height;
+    }
+
+    public double getHeight() {
+        return height;
     }
 
     @Override
-    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray)
+    {
         return null;
     }
 }

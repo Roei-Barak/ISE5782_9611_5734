@@ -1,47 +1,72 @@
 package geometries;
-import primitives.Point;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
 import java.util.List;
 
 /**
  *
- * @author Michael and Roi
+ *  * @author Michael & Roi
  */
-
 public class Tube extends Geometry{
-    final double radius;
-    final Ray axisRay;
+    final protected Ray axisRay;
+    final protected double radius;
 
-    public Tube(double rd, Ray r){
-        radius=rd;
-        axisRay = new Ray(r.getP0(),r.getDir());
+    public Ray getAxisRay() {
+        return axisRay;
+    }
+
+    public double getRadius() {
+        return radius;
     }
 
     @Override
-    public Vector getNormal(Point point) {
-        Point p = axisRay.getP0();
-        Vector v=axisRay.getDir();
+    public String toString() {
+        return "Tube{" +
+                "axisRay=" + axisRay +
+                ", radius=" + radius +
+                '}';
+    }
 
-        Vector tmp = point.subtract(p);
-        double num = v.dotProduct(tmp);
-        Point p2 = p.add(v.scale(num));
-        if (p.equals(p2)) {
-            throw new IllegalArgumentException("point cannot be on the tube axis");
+    public Tube(Ray axisRay, double radius) {
+        this.axisRay = axisRay;
+        this.radius = radius;
+    }
+
+    @Override
+    /** public Vector getNormal(Point point)
+     {
+     // TODO Auto-generated method stub
+     //n = normalize(P - O)
+     // O is projection of P on cylinder's ray:
+     // t = v (P ג€“ P0)
+     // O = P0 + tv
+     Point p0 = axisRay.getP0();
+     Vector v = axisRay.getDir();
+     //t = v (P ג€“ P0)
+     double t = point.subtract(p0).dotProduct(v);
+     // O = P0 + tv
+     Point o=null;
+     if (!Util.isZero(t))// if it's close to 0, we'll get ZERO vector exception
+     o = p0.add(v.scale(t));
+     Vector n = point.subtract(o).normalize();
+     return n;
+     }*/
+
+    public Vector getNormal(Point p){
+        double t = (axisRay.getDir()).dotProduct(p.subtract(axisRay.getP0()));
+        if (t != 0) //in case the point is not across the ray point
+        {
+            Point center = axisRay.getP0().add(axisRay.getDir().scale(t));
+            return p.subtract(center).normalize();
         }
-        Vector norm = point.subtract(p2).normalize();
-        return norm;
-
+        else // in case the point is across the ray point
+            return p.subtract(axisRay.getP0()).normalize();
     }
-    /***
-     * implementation of findIntersections from Geometry
-     * @param ray - ray pointing towards the graphic object
-     * @return Intersections between the ray and the geometry.
-     */
+
 
     @Override
-    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         return null;
     }
+
 }

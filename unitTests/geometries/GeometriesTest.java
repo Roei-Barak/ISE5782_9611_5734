@@ -18,7 +18,7 @@ class GeometriesTest {
     void testFindIntersections() {
         Geometries forms = new Geometries(
                 new Plane(new Point(2, 0, 0), new Vector(-1, 1, 0)),
-                new Sphere( new Point(5, 0, 0),2d),
+                new Sphere(2d, new Point(5, 0, 0)),
                 new Triangle(new Point(8.5, -1, 0), new Point(7.5, 1.5, 1), new Point(7.5, 1.5, -1))
         );
         Ray ray;

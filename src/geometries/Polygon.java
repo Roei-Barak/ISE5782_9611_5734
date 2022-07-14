@@ -1,9 +1,14 @@
 package geometries;
 
+import primitives.Point;
+import primitives.Ray;
+import primitives.Vector;
+
+import java.util.LinkedList;
 import java.util.List;
 
-import primitives.*;
-import static primitives.Util.*;
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
@@ -85,50 +90,46 @@ public class Polygon extends Geometry {
 	}
 
 	@Override
-	public Vector getNormal(Point point) {
+	public Vector getNormal(Point point)
+	{
 		return plane.getNormal();
 	}
-	/***
-	 * implementation of findIntersections from Geometry
-	 * @param ray - ray pointing towards the graphic object
-	 * @return Intersections between the ray and the geometry.
-	 */
 
 	@Override
-	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
-			List<GeoPoint> tentativeIntersection = plane.findGeoIntersections(ray);
-			// if we do not intersect with plane we can not possibly intersect the triangle.
-			if (tentativeIntersection == null){
-				return null;
-			}
-			// algorithm to test if given point P we got from plane findIntersections is inside the triangle
-			Point p0 = ray.getP0();
-			Vector v = ray.getDir();
-			int size = vertices.size();
-			Vector[] vectorsToP0 = new Vector[size];
-			Vector[] crossVectors = new Vector[size];
-			for (int i = 0; i < size; i++){
-				vectorsToP0[i] = (vertices.get(i).subtract(p0));
-			}
-			for (int i = 0; i < size; i++) {
-				crossVectors[i] = vectorsToP0[i].crossProduct(vectorsToP0[(i + 1) % size]).normalize();
-			}
-			int numOfPositiveNumbers = 0;
-			for (Vector vector : crossVectors){
-				double vn = v.dotProduct(vector);
-				if (isZero(vn)){
-					return null;
-				}
-				if (vn >0){
-					numOfPositiveNumbers++;
-				}
-			}
-			// if numOfPositiveNumbers is not 0 or size(number of vertices)
-			// it's mean there is at least one number with odd sign
-			if (numOfPositiveNumbers != 0 && numOfPositiveNumbers != size){
-				return null;
-			}
-			return List.of(new GeoPoint(this,tentativeIntersection.get(0).point));
-	}
+	public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+		var myList = plane.findGeoIntersectionsHelper(ray);
+		if (myList == null)
+			return null;
+		var dir = ray.getDir();
 
+		var p0 = ray.getP0();
+		var vectors = new LinkedList<Vector>();
+		for (var vertice : vertices)
+			vectors.add(vertice.subtract(p0));
+
+		var normals = new LinkedList<Vector>();
+		for (int i = 0; i < vectors.size() - 1; i++) {
+			normals.add(vectors.get(i).crossProduct(vectors.get(i + 1)));
+		}
+		normals.add(vectors.getLast().crossProduct(vectors.getFirst()));
+
+		Boolean isPositive = false, isNegative = false;
+		for (var normal : normals) {
+			var result = alignZero(normal.dotProduct(dir));
+			if (result != 0) {
+				if (result > 0) {
+					isPositive = true;
+					if (isNegative == true)
+						return null;
+				} else if (result < 0) {
+					isNegative = true;
+					if (isPositive == true)
+						return null;
+				}
+			} else
+				return null;
+		}
+
+		return List.of(new GeoPoint(this, myList.get(0).point));
+	}
 }

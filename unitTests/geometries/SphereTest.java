@@ -16,7 +16,7 @@ class SphereTest {
      */
     @Test
     void getNormal() {
-        Sphere sphere = new Sphere(new Point(0, 0, 0), 5);
+        Sphere sphere = new Sphere(5, new Point(0, 0, 0));
 
         // ============ Equivalence Partitions Tests ==============
         assertEquals(new Vector(0, 0, 1), sphere.getNormal(new Point(0, 0, 5)), "Bad normal to sphere");
@@ -26,7 +26,7 @@ class SphereTest {
      */
     @Test
     public void testFindIntersections() {
-        Sphere sphere = new Sphere(new Point (1, 0, 0),1d);
+        Sphere sphere = new Sphere(1d, new Point (1, 0, 0));
 
 
         // =============== Equivalence Partitions Tests ================//

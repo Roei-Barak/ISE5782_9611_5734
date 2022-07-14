@@ -1,17 +1,18 @@
+package primitives;
+
+import geometries.Intersectable.GeoPoint;
+import java.util.List;
+import java.util.Objects;
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
+
 /**
  * Ray class represents a vector with a location point
  * it contains a Vector and a Point
  *  * @author Michael  & Roi
  */
-package primitives;
 
-import geometries.Intersectable.GeoPoint;
 
-import java.util.List;
-import java.util.Objects;
-
-import static primitives.Util.alignZero;
-import static primitives.Util.isZero;
 
 public class Ray {
     final Point p0;

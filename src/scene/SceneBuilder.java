@@ -1,6 +1,3 @@
-/**
- *
- */
 package scene;
 
 import geometries.Geometries;
@@ -134,8 +131,8 @@ public class SceneBuilder {
             Element element = (Element) node;
             var r = element.getAttributeNode("radius").getValue().toString();
             var center = element.getAttributeNode("center").getValue().toString().split(" ");
-            return new Sphere(new Point(Double.parseDouble(center[0]), Double.parseDouble(center[1]),
-                                Double.parseDouble(center[2])), Double.parseDouble(r));
+            return new Sphere(Double.parseDouble(r), new Point(Double.parseDouble(center[0]), Double.parseDouble(center[1]),
+                                            Double.parseDouble(center[2])));
         }
         return null;
     }
