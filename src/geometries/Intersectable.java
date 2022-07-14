@@ -4,7 +4,12 @@ import primitives.Point;
 import primitives.Ray;
 
 import java.util.List;
-import java.util.Objects;
+
+
+/**
+ *
+ * @author Michael and Roi
+ */
 
 /***
  * common interface for all graphic objects

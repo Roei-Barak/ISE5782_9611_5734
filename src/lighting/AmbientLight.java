@@ -1,35 +1,29 @@
 package lighting;
-
 import primitives.Color;
 import primitives.Double3;
 
 /**
- * ambient light for all graghic objects
- * extend from light and heir the intensity
+ * Ambient light for all objects in the scene
  */
-public class AmbientLight extends Light{
-
-
+public class AmbientLight extends Light {
 
     /**
-     * primary constractor
-     * @param Ia basic intensity light
-     * @param Ka attention
+     * A Ctor who gets the color and power of light
+     *
+     * @param Ia - Fill light intensity according to RGB
+     * @param Ka - Coefficient of attenuation of filler light
      */
-    public AmbientLight(Color Ia, Double3 Ka){
+    public AmbientLight(Color Ia , Double3 Ka){
         super(Ia.scale(Ka));
     }
 
-
     /**
-     * default constractor
+     * default constructor setting ambientLight to Black
      */
     public AmbientLight(){
-
         super(Color.BLACK);
     }
 
 
-
-
 }
+

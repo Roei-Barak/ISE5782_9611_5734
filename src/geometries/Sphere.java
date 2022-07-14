@@ -5,6 +5,11 @@ import primitives.Vector;
 
 import java.util.*;
 
+/**
+ *
+ * @author Michael and Roi
+ */
+
 public class Sphere extends Geometry{
     final Point center;
     final double radius;

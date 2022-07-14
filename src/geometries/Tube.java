@@ -5,6 +5,11 @@ import primitives.Vector;
 
 import java.util.List;
 
+/**
+ *
+ * @author Michael and Roi
+ */
+
 public class Tube extends Geometry{
     final double radius;
     final Ray axisRay;
