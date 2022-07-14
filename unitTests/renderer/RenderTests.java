@@ -1,12 +1,16 @@
 package renderer;
 
-import org.junit.jupiter.api.Test;
-
+import geometries.Sphere;
+import geometries.Triangle;
 import lighting.AmbientLight;
-import geometries.*;
-import primitives.*;
-import renderer.*;
+import org.junit.jupiter.api.Test;
+import primitives.Color;
+import primitives.Double3;
+import primitives.Point;
+import primitives.Vector;
 import scene.Scene;
+import scene.SceneBuilder;
+
 import static java.awt.Color.*;
 
 /**
@@ -22,13 +26,12 @@ public class RenderTests {
 	 */
 	@Test
 	public void basicRenderTwoColorTest() {
-		Scene scene = new Scene.SceneBuilder("Test scene")//
+		Scene scene = new Scene("Test scene")//
 				.setAmbientLight(new AmbientLight(new Color(255, 191, 191), //
 						new Double3(1, 1, 1))) //
-				.setBackground(new Color(75, 127, 90))
-				.build();
+				.setBackground(new Color(75, 127, 90));
 
-		scene.getGeometries().add(new Sphere(new Point(0, 0, -100), 50d),
+		scene.geometries.add(new Sphere(new Point(0, 0, -100), 50d),
 				new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100)), // up
 				// left
 				new Triangle(new Point(-100, 0, -100), new Point(0, -100, -100), new Point(-100, -100, -100)), // down
@@ -54,11 +57,10 @@ public class RenderTests {
 	 */
 	@Test
 	public void basicRenderMultiColorTest() {
-		Scene scene = new Scene.SceneBuilder("Test scene")
-				.setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.2)))
-				.build();
+		Scene scene = new Scene("Test scene")//
+				.setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.2))); //
 
-		scene.getGeometries().add( //
+		scene.geometries.add( //
 				new Sphere(new Point(0, 0, -100), 50),
 				// up left
 				new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100))
@@ -78,6 +80,24 @@ public class RenderTests {
 
 		camera.renderImage();
 		camera.printGrid(100, new Color(WHITE));
+		camera.writeToImage();
+	}
+
+	/**
+	 * Test for XML based scene - for bonus
+	 */
+	@Test
+	public void basicRenderXml() {
+		Scene scene = new Scene("XML Test scene");
+		SceneBuilder sceneBuilder = new SceneBuilder(scene);
+		sceneBuilder.loadSceneFromFile("basicRenderTestTwoColors.xml");
+		Camera camera = new Camera(Point.ZERO, new Vector(0, 0, -1), new Vector(0, 1, 0)) //
+				.setVPDistance(100) //
+				.setVPSize(500, 500)
+				.setImageWriter(new ImageWriter("xml render test", 1000, 1000))
+				.setRayTracer(new RayTracerBasic(scene));
+		camera.renderImage();
+		camera.printGrid(100, new Color(java.awt.Color.YELLOW));
 		camera.writeToImage();
 	}
 }

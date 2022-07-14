@@ -1,32 +1,64 @@
+/**
+ * Ray class represents a vector with a location point
+ * it contains a Vector and a Point
+ *  * @author Michael  & Roi
+ */
 package primitives;
+
+import geometries.Intersectable.GeoPoint;
 
 import java.util.List;
 import java.util.Objects;
-import geometries.Intersectable.GeoPoint;
-import static primitives.Util.isZero;
-/**
- *
- * @author Michael and Roi
- */
-public class Ray {
-    final private Point p0;
-    final private Vector dir;
 
-    /***
-     * constractor with params
-     * @param  p-Point
-     * @param d-Vector
-     */
-    public Ray( Point p, Vector d)
-    {
-        p0=new Point(p.get_xyz());
-        dir=new Vector(d.get_xyz()).normalize() ;
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
+
+public class Ray {
+    final Point p0;
+    final Vector dir;
+    private static final double DELTA = 0.1;
+
+
+    public Ray(Point p0, Vector dir) {
+        this.p0 = p0;
+        this.dir = dir.normalize();
     }
 
-    /***
-     * print the elements
-     * @return string
-     */
+    public Ray(Point p0, Vector dir, Vector normal) {
+        this.dir = dir;
+        double nv = alignZero(normal.dotProduct(dir));
+        if (!isZero(nv)){
+            Vector moveVector = normal.scale(nv > 0 ? DELTA : -DELTA);
+            this.p0 = p0.add(moveVector);
+        }else{
+            this.p0 = p0;
+        }
+
+        //Vector delta = normal.scale(normal.dotProduct(dir) > 0 ? DELTA :  -DELTA);
+        //Point point = p0.add(delta);
+    }
+
+    public Point getP0() {
+        return p0;
+    }
+
+    public Vector getDir() {
+        return dir;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Ray)) return false;
+        Ray ray = (Ray) o;
+        return Objects.equals(getP0(), ray.getP0()) && Objects.equals(getDir(), ray.getDir());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getP0(), getDir());
+    }
+
     @Override
     public String toString() {
         return "Ray{" +
@@ -34,70 +66,38 @@ public class Ray {
                 ", dir=" + dir +
                 '}';
     }
-
-    /***
-     *
-     * @return p0
-     */
-    public Point getP0() {
-        return p0;
-    }
-    /***
-     *
-     * @return dir
-     */
-    public Vector getDir() {
-        return dir;
-    }
-
-    /***
-     *
-     * @param d-object to compare
-     * @return true if they are equal
-     */
-    public Point getPoint(double d){
-        if(isZero(d)){
+    public Point getPoint(double t) {
+        if (isZero(t)){
             return p0;
         }
-        return p0.add(dir.scale(d));
-    }
+        return p0.add(dir.scale(t));
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Ray ray = (Ray) o;
-        return Objects.equals(p0, ray.p0) && Objects.equals(dir, ray.dir);
     }
-
     /**
-     * find the closet point
-     * @param points list of points
-     * @return the closet point
+     *
+     * @param points
+     * @return The closest point to the began of the ray
      */
     public Point findClosestPoint(List<Point> points) {
         return points == null || points.isEmpty() ? null
                 : findClosestGeoPoint(points.stream().map(p -> new GeoPoint(null, p)).toList()).point;
     }
-
+    /**
+     *
+     * @param geoPoints
+     * @return The closest point to the began of the ray
+     */
     public GeoPoint findClosestGeoPoint(List<GeoPoint> geoPoints) {
 
-        double minDistance = Double.MAX_VALUE;
-        double pointDistance;
-        GeoPoint closestPoint = null;
-        for (GeoPoint geopoint : geoPoints) {
-            pointDistance = geopoint.point.distanceSquared(p0);
-            if (pointDistance < minDistance) {
-                minDistance = pointDistance;
-                closestPoint = geopoint;
-            }
+        if (geoPoints == null) //In case of an empty list
+            return null;
+        GeoPoint closePoint = geoPoints.get(0);	//Save the first point in the list
+        for (GeoPoint p : geoPoints) {
+            if (closePoint.point.distance(p0) > p.point.distance(p0))	//In case the distance of closes point is bigger than the p point
+                closePoint = p;
         }
-        return closestPoint;
+        return closePoint;
     }
-    /*
-    @Override
-    public int hashCode() {
-        return Objects.hash(p0, dir);
-    }
-     */
+
 }
+

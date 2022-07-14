@@ -1,73 +1,78 @@
 package lighting;
-
-import geometries.Geometries;
 import primitives.Color;
-import primitives.Double3;
-import primitives.Point;
-import primitives.Vector;
-import scene.Scene;
+import primitives.*;
 
-public class PointLight extends Light  implements LightSource{
-    private final Point position;
-    private Double3 kC;
-    private Double3 kL;
-    private Double3 kQ;
 
-    /***
-     * constractor with default values for the discount factors
-     * @param intensity intensity color
-     * @param p the position of the light
+/**
+ * The class represents a point light source such as a simple lamp.
+ */
+
+public class PointLight extends Light implements LightSource{
+    private Point position;
+    private double kC = 1, kL = 0, kQ = 0;
+
+    /**
+     *
+     * @param intensity
+     * @param position
+
      */
-    public PointLight(Color intensity, Point p) {
+    public PointLight(Color intensity, Point position) {
         super(intensity);
-        this.position = p;
-        kC = new Double3(1);
-        kL = new Double3(0);
-        kQ = new Double3(0);
+        this.position = position;
+        kC = 1;
+        kL = 0;
+        kQ = 0;
     }
 
-    public PointLight setKc(Double3 kc) {
-        this.kC = kc;
-        return this;
-    }
-    public PointLight setKc(double kc) {
-        this.kC = new Double3(kc);
-        return this;
-    }
-
-    public PointLight setKl(Double3 kl) {
-        this.kL = kl;
+    /**
+     * ------------- setter -----------------
+     *
+     * @param kC the constant coefficient to set
+     * @return the {@link #PointLight(Color, Point)} itself
+     */
+    public PointLight setKC(double kC){
+        this.kC = kC;
         return this;
     }
 
-    public PointLight setKl(double kl) {
-        this.kL = new Double3(kl);
+    /**
+     * ------------- setter -----------------
+     *
+     * @param kL the Linear coefficient to set
+     * @return the {@link #PointLight(Color, Point)} itself
+     */
+    public PointLight setKL(double kL){
+        this.kL = kL;
         return this;
     }
 
-    public PointLight setKq(Double3 kq) {
-        this.kQ = kq;
-        return this;
-    }
-    public PointLight setKq(double kq) {
-        this.kQ = new Double3(kq);
+    /**
+     * ------------- setter -----------------
+     *
+     * @param kQ the Quadratic coefficient to set
+     * @return the {@link #PointLight(Color, Point)} itself
+     */
+    public PointLight setKQ(double kQ){
+        this.kQ = kQ;
         return this;
     }
 
     @Override
     public Color getIntensity(Point p) {
-
-        double distance = position.distance(p);
-        Double3 denominator = kC.add(kL.scale(distance).add(kQ.scale(Math.pow(distance,2))));
-        return getIntensity().reduce(denominator);
+        double d = position.distance(p);
+        Color iL = getIntensity().scale((1 / (kC + kL * d + kQ * d * d)));
+        return iL;
     }
 
     @Override
     public Vector getL(Point p) {
-        //check that we will not get ZERO vector
-        if(position.equals(p)){
-            return null;
-        }
         return p.subtract(position).normalize();
+    }
+
+    @Override
+    public double getDistance(Point point)
+    {
+        return position.distance(point);
     }
 }

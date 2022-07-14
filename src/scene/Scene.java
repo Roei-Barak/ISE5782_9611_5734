@@ -1,5 +1,4 @@
 package scene;
-
 import geometries.Geometries;
 import lighting.AmbientLight;
 import lighting.LightSource;
@@ -8,109 +7,86 @@ import primitives.Color;
 import java.util.LinkedList;
 import java.util.List;
 
-
+/**
+ *  Scene or holding all the objects involved
+ *  using Builder Pattern
+ */
 public class Scene {
-
-    private final String name;
-    private final Color background;
-    private final AmbientLight ambientLight;
-    private final Geometries geometries;
-    List<LightSource> lights = new LinkedList<>();
-
-    /***
-     * @return the name of the scene
+    /**
+     * name of the scene (the body)
      */
+    public  String name;
+    /**
+     * the background color
+     */
+    public  Color background;
+    /**
+     * strong of the color
+     */
+    public  AmbientLight ambientLight;
+    /**
+     * list of bodies that create our body
+     */
+    public  Geometries geometries;
 
-    public String getName() {
-        return name;
+    public List<LightSource> lights=new LinkedList<>();
+
+    /**
+     * ctor: get name and build empty body with color black with the name
+     *
+     * @param name - name of the scene (the "empty" body)
+     */
+    public Scene(String name) {
+        this.name = name;
+        background = Color.BLACK;
+        ambientLight = new AmbientLight();
+        geometries = new Geometries();
+    }
+    /**
+     * ------------- setter -----------------
+     *
+     * @param background the background to set
+     * @return itself scene
+     */
+    public Scene setBackground(Color background) {
+        this.background = background;
+        return this;
+    }
+    /**
+     * ------------- setter -----------------
+     *
+     * @param ambientLight the ambientLight to set
+     * @return itself scene
+     */
+    public Scene setAmbientLight(AmbientLight ambientLight) {
+        this.ambientLight = ambientLight;
+        return this;
     }
 
-    /***
-     * @return the background color at the scene
+    /**
+     * ------------- setter -----------------
+     *
+     * @param geometries the geometries to set
+     * @return itself scene
+     *
      */
-
-    public Color getBackGround() {
-        return background;
+    public Scene setGeometries(Geometries geometries) {
+        this.geometries = geometries;
+        return this;
     }
-
-    /***
-     * @return the ambient light in the scene
+    /**
+     * ------------- setter -----------------
+     *
+     * @param lights - list of sources light
+     * @return itself scene
      */
-
-    public AmbientLight getAmbientLight() {
-        return ambientLight;
-    }
-
-    /***
-     * @return all the geometry shapes
-     */
-    public Geometries getGeometries() {
-        return geometries;
-    }
-
-    /***
-     * @return all the lights sources
-     */
-    public List<LightSource> getLights() {
-        return lights;
-    }
-
-
-
-    /***
-     * constructor in builder pattern
-     * @param builder- object builder with same params as the scene's params
-     */
-    public Scene(SceneBuilder builder) {
-        name = builder.name;
-        background = builder.background;
-        ambientLight = builder.ambientLight;
-        geometries = builder.geometries;
-        lights = builder.lights;
-    }
-
-    public static class SceneBuilder {
-
-        private final String name;
-        private List<LightSource> lights = new LinkedList<>();
-        private Color background = Color.BLACK;
-        private AmbientLight ambientLight = new AmbientLight();
-        private Geometries geometries = new Geometries();
-
-        public SceneBuilder(String name) {
-            this.name = name;
-        }
-
-        //chaining methods
-
-        public SceneBuilder setBackground(Color background) {
-            this.background = background;
-            return this;
-        }
-
-        /***
-         * set the lights database
-         * @param lights - collection of thwe lights in the scene
-         * @return the scene
-         */
-        public SceneBuilder setLights(List<LightSource> lights) {
-            this.lights = lights;
-            return this;
-        }
-
-        public SceneBuilder setAmbientLight(AmbientLight ambientLight) {
-            this.ambientLight = ambientLight;
-            return this;
-        }
-
-        public SceneBuilder setGeometries(Geometries geometries) {
-            this.geometries = geometries;
-            return this;
-        }
-
-        public Scene build() {
-            Scene scene = new Scene(this);
-            return scene;
-        }
+    public Scene setLights(List<LightSource> lights) {
+        this.lights = lights;
+        return this;
     }
 }
+
+
+
+
+

@@ -4,24 +4,37 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
 
-public class DirectionalLight extends Light implements LightSource {
+/**
+ * DirectionalLight
+ */
+public class DirectionalLight extends Light implements LightSource{
     private Vector direction;
-    /***
-     * the constructor with params
-     * @param c color
+
+    /**
+     *
+     * @param intensity
+     * @param dir
      */
-    public DirectionalLight(Color c,Vector v){
-        super(c);
-        direction=v.normalize();
+    public DirectionalLight(Color intensity, Vector dir) {
+        super(intensity);
+        direction = dir.normalize();
     }
 
     @Override
-    public Color getIntensity(Point p) {
+    public Color getIntensity(Point p){
         return getIntensity();
     }
 
     @Override
-    public Vector getL(Point p) {
+    public Vector getL(Point p){
         return direction;
     }
+
+    @Override
+    public double getDistance(Point point)
+    {
+        return Double.POSITIVE_INFINITY;
+    }
+
+
 }
